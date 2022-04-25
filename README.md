@@ -1,12 +1,14 @@
 # Curso-R-Thomas-Emeli
 
-Título
+Título:
 Análise de dados com o programa R
-Objetivos
+
+Objetivos:
 Familiarizar o aluno com o R, o R Studio e suas funcionalidades;
 Apresentar conceitos básicos de estatística aplicada;
 Apresentar na prática os principais métodos utilizados em estatística experimental.
-Docentes
+
+Docentes:
 Emily Silva Araujo
 http://lattes.cnpq.br/1070394303501538
 Thomas Bruno Michelon 
