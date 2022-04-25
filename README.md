@@ -13,7 +13,8 @@ Emily Silva Araujo
 http://lattes.cnpq.br/1070394303501538
 Thomas Bruno Michelon 
 http://lattes.cnpq.br/2419740505296758
-Ementa
+
+Ementa:
 1.	Introdução ao programa R: a interface do programa
 1.1	Instalação do R e R studio
 1.2	R studio layout – entendendo o programa
