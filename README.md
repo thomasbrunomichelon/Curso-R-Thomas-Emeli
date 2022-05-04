@@ -15,40 +15,40 @@ Thomas Bruno Michelon
 http://lattes.cnpq.br/2419740505296758
 
 Ementa:
-1.	Introdução ao programa R: a interface do programa
-1.1	Instalação do R e R studio
-1.2	R studio layout – entendendo o programa
-1.3	Introdução à linguagem de R
-1.4	O editor de objetos em R
-1.5	Dados em R
-1.5.1	Vetores
-1.5.2	Fatores
-1.5.3	Matrizes
-1.5.4	Estruturas de dados
-1.5.5	Listas
-1.5.6	Nomeando filas e colunas de matrizes e vetores
-1.6	Importando dados
-1.7	Instalando pacotes
-1.8	Entendendo os pacotes
-1.8.1	Library
-1.8.2	funções dentro dos pacotes
-1.8.3	procurando ajuda no próprio R
-1.8.4	Pacotes importantes
-1.9	Procurando ajuda
-2.	Manipulação de dados
-2.1	Manipulação usando o R base
-2.1.1	Função fix
-2.1.2	Removendo linhas
-2.1.3	Alterando dados
-2.1.4	subset()
-2.2	Pacote dplyr
-2.2.1	filter()
-2.2.2	distinct()
-2.2.3	arrange()
-2.2.4	select()
-2.2.5	rename()
-2.2.6	mutate() and transmutate()
-2.2.7	summarise()
+  1. Introdução ao programa R: a interface do programa
+  - 1.1	Instalação do R e R studio
+  - 1.2	R studio layout – entendendo o programa
+  - 1.3	Introdução à linguagem de R
+  - 1.4	O editor de objetos em R
+  - 1.5	Dados em R
+    - 1.5.1	Vetores
+    - 1.5.2	Fatores
+    - 1.5.3	Matrizes
+    - 1.5.4	Estruturas de dados
+    - 1.5.5	Listas
+    - 1.5.6	Nomeando filas e colunas de matrizes e vetores
+  - 1.6	Importando dados
+  - 1.7	Instalando pacotes
+  - 1.8	Entendendo os pacotes
+  - 1.8.1	Library
+  - 1.8.2	funções dentro dos pacotes
+  - 1.8.3	procurando ajuda no próprio R
+  - 1.8.4	Pacotes importantes
+  - 1.9	Procurando ajuda
+- 2.	Manipulação de dados
+ - 2.1	Manipulação usando o R base
+  - 2.1.1	Função fix
+  - 2.1.2	Removendo linhas
+  - 2.1.3	Alterando dados
+  - 2.1.4	subset()
+ - 2.2	Pacote dplyr
+  - 2.2.1	filter()
+  - 2.2.2	distinct()
+  - 2.2.3	arrange()
+  - 2.2.4	select()
+  - 2.2.5	rename()
+  - 2.2.6	mutate() and transmutate()
+  - 2.2.7	summarise()
 3.	Estatística descritiva
 3.1.1	Representações gráficas
 3.1.1.1	R base
