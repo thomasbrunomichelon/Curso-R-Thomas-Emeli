@@ -1,4 +1,3 @@
-asd
 # 1. Estrutura de dados no R (s?o as formas que podemos armazenar informa??es no R, informa??es que podem ser dos nosso dados ou geradas a partir do uso de fun??es e modelos)
 # Vetores (contem um uma linha com elementos primitivos (interger, numeric, logica, character, complex))
 Exemplo1_vetor <- 1:20

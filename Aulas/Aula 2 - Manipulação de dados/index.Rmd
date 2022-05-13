@@ -1,0 +1,33 @@
+---
+title: "Manipulação de dados"
+subtitle: "Curso de estatística aplicada à agronomia"
+author: "Thomas Bruno Michelon e Emili Araujo"
+date: "`r Sys.Date()`"
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+---
+
+```{r setup, cache = TRUE, echo = FALSE, message = FALSE, warning = FALSE, tidy = FALSE}
+
+```
+
+
+# Manipulação básica
+```{r, echo = TRUE, fig.height=5,fig.width=7}
+data(mtcars)
+head(mtcars)
+x <- c(1,2,3)
+x
+```
+
+saux    asu
+
+
+
+```{r}
+
+```
+
