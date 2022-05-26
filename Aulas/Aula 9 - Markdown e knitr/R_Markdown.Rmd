@@ -1,0 +1,79 @@
+---
+
+---
+
+---
+title: "R Markdown"
+author: "Emily Silva Araujo"
+date: '2022-05-18'
+output: html_document
+---
+
+# Títulos
+
+# Este é um título principal
+
+## Este é um título secundário
+
+### Este é um título terciário
+
+# Listas não ordenadas
+
+-   abacate primeiro item na lista
+-   damasco terceiro item na lista
+-   banana segundo item na lista
+-   coco quarto item na lista
+
+# Listas ordenadas
+
+1.  abacate
+2.  banana
+3.  coco
+4.  damasco
+
+# Links
+
+Para inserir o link pode ser feito os seguintes passos
+
+1)  Escrever o nome do que se deseja colocar o link
+2)  Entre colchetes [escreva o que deseja linkar]
+3)  Entre parênteses escreva o site onde quer direcionar o link
+4)  Apertar Knit na barra de ferramentas e visualizar o resultado
+
+Exemplo
+
+1)  Estudamos na Universidade Federal do Paraná 
+2)  [UFPR]
+3)  (<https://www.ufpr.br/portalufpr/>)
+
+Deve ficar assim: Estudamos na Universidade Federal do Paraná -  [UFPR](https://www.ufpr.br/portalufpr/)
+
+Algumas vezes existe a necessidade de inserir muitos links no documento e escrever no formato demonstrado acima pode ficar difícil de visualizar no script. Uma alternativa seria escrever todos os links em formato de nota de rodapé.
+
+
+Exemplo  
+
+
+1)  A palavra que se deseja inserir o link deve estar entre estes simbolos [ ], seguida do número do link que você vai indicar na nota de rodapé.
+
+2)  Na nota de rodapé escrever o número do link entre [], seguido de dois pontos e o link do site desejado. No final, coloque a palavra escolhida entre aspas. 
+[1]:http://www.agrarias.ufpr.br/portal/engenharia-agronomica "agronomia"  
+[2]:http://www.prppg.ufpr.br/site/en/ "PRPPG"
+
+Exemplo
+
+Deve ficar assim:  
+
+1)  **Eu estudei [agronomia][1] no Setor de Ciências Agrarias da UFPR e Mestrado na Pós-graduação em Produção Vegetal [PRPPG][2] da UFPR**.
+
+2)  Aqui estão as notas de rodapé
+
+[1]:http://www.agrarias.ufpr.br/portal/engenharia-agronomica "agronomia"  
+[2]:http://www.prppg.ufpr.br/site/en/ "PRPPG"
+
+# Novas linhas
+
+Para obter novas linhas é **obrigatorio** que se aperte duas vezes o enter no final da frase. Veja o exemplo.
+
+Linha 1
+Linha 2
