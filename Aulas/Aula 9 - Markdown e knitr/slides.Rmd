@@ -1,0 +1,294 @@
+---
+title: "Estatistica experimental"
+author: "Emily Araujo e Thomas Bruno Michelon"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  ioslides_presentation:
+    css: ../../style.css
+    logo: ../../curso-agro-r-logo.png
+    smaller: yes
+    widescreen: yes
+  slidy_presentation: default
+subtitle: Curso R para agronomia
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(paged.print=FALSE)
+knitr::opts_chunk$set(echo=TRUE)
+knitr::opts_chunk$set(error=FALSE)
+knitr::opts_chunk$set(message=FALSE)
+knitr::opts_chunk$set(warning=FALSE)
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
+```
+
+## Introdução
+
+-   R Markdown é uma ferramenta contida dentro do Rstudio, a qual te permite desenvolver de forma fácil documentos em formato HTML, PDF e word, desde o R.
+
+-   Com o R Markdown, você pode inserir o código de seus scripts do R dentro de teus documentos ou apresentações.
+
+## O que é o R Markdown?
+
+-   O R markdown é uma integração do código do R com o Markdown.
+-   Documentos escritos em R Markdown contém os scripts dentro dele, o que permite ao usuário criar documentos nos quais facilmente se pode visualizar os codigos e o resultados destes (resultados dos testes estatisticos, tabelas e figuras graficas por exemplo).
+
+## Qual a utilidade desta ferramenta?
+
+Originalmente foi pensada para publicar textos na internet de forma mais prática e simples. Entretanto, possue muitas utilidades:
+
+> -   Criar apostilas didáticas ou livros.
+
+> -   Criar apresentações.
+
+> -   Ajuda no processo de pesquisa reproduzivel, isto é, outro usuário pode comprovar os resultados do teu trabalho de forma rápida, passo a passo.
+
+> -   Escrever relatórios técnicos com melhor apresentação, de forma simples e didático.
+
+## Linguagem do R Markdown
+
+## Títulos
+
+-   Headings são os títulos.
+
+-   É importante digitar sempre fora dos trechos nos quais você deseja adicionar os códigos.
+
+-   Outro detalhe, digite os \# na frente do título, não junto; como vemos no exemplo.
+
+## Este é um título principal
+
+### Este é um título secundário
+
+#### Este é um título terciário
+
+## Formas de destacar o texto
+
+-   O símbolo de \* deixará a frase em formato italico.
+
+-   Importante é lembrar que o símbolo de \* deve ser colocado no início e no final da frase.
+
+-   O asterisco deve estar colado na frase.
+
+-   Sempre será necessário usar apenas 1\*, uma vez que dois \*\* indicam outro formato de letra. Esta ação pode ser executada também dentro dos trechos onde será exibido o código do script (chamado chunk). Veja o exemplo.
+
+## Listas não ordenadas
+
+abacate, primeiro item na lista
+
+damasco, terceiro item na lista
+
+banana, segundo item na lista
+
+coco, quarto item na lista
+
+## Listas ordenadas
+
+abacate
+
+banana
+
+coco
+
+damasco
+
+## Criar Slides
+
+1)  Digitar \## na frente do novo título do slide, **importante não digitar colado**, use um espaço!\
+2)  Se quiser fazer um slide sem título, use tres \*\*\*\
+3)  Você pode adicionar subtitulos com mais sinais #.\
+    Exemplo:### Subtitulo;#### Subtitulo ainda menor!
+
+### Subtitulo
+
+#### Subtitulo ainda menor!
+
+## Criando marcadores (pontos)
+
+• Para adicionar marcadores em um slide, use o hifen seguido de um espaço.\
+Exemplo: - Acabo de criar um marcador!
+
+-   Acabo de criar um marcador!
+-   Criando marcadores (pontos)
+
+## Criando marcadores (pontos)
+
+• Para adicionar um sub-item no slide, use quatro espaços e adicione um sinal de +
+
+-   Acabo de criar um marcador!
+    -   Acabo de criar um sub-item
+
+## Criando marcadores (pontos)
+
+• Para adicionar marcadores que vão aparecer um por um, no clikar com: \>- marcador interativo! Veja o exemplo
+
+> -   abacate
+
+> -   banana
+
+> -   coco
+
+> -   damasco
+
+## Links
+
+Para inserir o link pode ser feito os seguintes passos
+
+1)  Escrever o nome do que se deseja colocar o link
+2)  Entre colchetes [escreva o que deseja linkar]
+3)  Entre parênteses escreva o site onde quer direcionar o link
+4)  Apertar Knit na barra de ferramentas e visualizar o resultado
+
+## Links - Exemplo
+
+1)  Estudamos na Universidade Federal do Paraná
+2)  [UFPR]
+3)  (<https://www.ufpr.br/portalufpr/>)
+
+Deve ficar assim:
+
+Estudamos na Universidade Federal do Paraná - [UFPR](https://www.ufpr.br/portalufpr/)
+
+## Links
+
+Algumas vezes existe a necessidade de inserir muitos links no documento e escrever no formato demonstrado anteriormente pode ficar difícil de visualizar no script.
+
+Uma alternativa seria escrever todos os links em formato de nota de rodapé.
+
+## Links - Exemplo
+
+1)  A palavra que se deseja inserir o link deve estar entre estes simbolos [ ], seguida do número do link que você vai indicar na nota de rodapé.
+
+\-**Eu estudei [agronomia](http://www.agrarias.ufpr.br/portal/engenharia-agronomica) no Setor de Ciências Agrarias da UFPR e Mestrado na Pós-graduação em Produção Vegetal, [PRPPG](http://www.prppg.ufpr.br/site/en/ "PRPPG") da UFPR**.
+
+2)  Na nota de rodapé escrever o número do link entre [ ], seguido de dois pontos e o link do site desejado. No final, coloque a palavra escolhida entre aspas.
+
+## Deve ficar assim:
+
+Eu estudei [agronomia](http://www.agrarias.ufpr.br/portal/engenharia-agronomica) no Setor de Ciências Agrarias da UFPR e Mestrado na Pós-graduação em Produção Vegetal, [PRPPG](http://www.prppg.ufpr.br/site/en/ "PRPPG") da UFPR.
+
+## Novas linhas
+
+Para obter novas linhas é **obrigatório** que se aperte duas vezes o enter no final da frase. Veja o exemplo.
+
+Linha 1 Linha 2 (não cliquei duas vezes no final da frase ou palavra)
+
+Linha 3\
+Linha 4 (cliquei duas vezes no final da frase ou palavra)
+
+## Considerações finais
+
+-   Ao principio o novo usuário devera gastar energia para aprender a usar esta ferramenta;
+
+-   Criar uma apresentação em R Markdown requer paciência e persistência, não desanime!
+
+-   Estas aulas apresentam uma introdução ao tema, certamente você deverá buscar informação adicional conforme tua necessidade!
+
+Para isso, deixaremos literatura!
+
+## Referências
+
+-   Roger D. Peng. Report Wrinting for Data Science in R.
+    -   This book is for sale at <http://leanpub.com/reportwriting>
+-   Para maiores informações sobre o R Markdown visite o site indicado:
+    -   <http://rmarkdown.rstudio.com/>
+
+# O primeiro documento em R Markdown
+
+## Criando um documento
+
+-   Para iniciar click em File\<New file\<R Markdown
+
+![](images/Figura%201.png){width="585"}
+
+------------------------------------------------------------------------
+
+-   Se for necessário, você deverá instalar os pacotes requeridos. Click sim e o Rstudio instalará para você.
+
+-   Existe a opção de escolher se deseja criar um documento, uma apresentação de slides ou até mesmo uma app (shiny).
+
+-   Você pode mudar o tipo de documento gerado por meio da linha de saída do cabeçário, ou através da seleção de saída do botão knit abaixo do menu.
+
+-   Neste exemplo vamos criar um documento.
+
+------------------------------------------------------------------------
+
+Digite o título do teu documento, o nome do autor e escolha uma opção de saída (HTML, PDF ou Word).\
+E aperte ok!
+
+![](images/Figura%202.png){width="586"}
+
+------------------------------------------------------------------------
+
+![](images/Figura%203.png){width="586"}
+
+-   O documento aberto aparece com algum conteúdo, mas você pode apagar tudo e escrever seu relório com tranquilidade.
+
+-   Para iniciar um trecho onde o código do R vai estar embutido ("chunk") sempre tem que iniciar com '''{r} e fecha com '''
+
+-   Echo= True, significa que teu código e resultados serão exibidos no documento.
+
+-   Se a opção for Echo= False, apenas vai aparecer o código, mas sem mostrar o resultado.
+
+## Embutindo um código em R
+
+    Isto é o que se considera "chunk" do código do R Markdown 
+
+-   Para ocultar o resultado do código de entrada, use echo=FALSE. '''{r, echo=FALSE}\
+-   Para mostrar apenas o código usado, use eval=FALSE. '''{r, eval=FALSE}\
+-   Para rodar o Código sem mostrar a entrada ou saída, use include=FALSE. '''{r, include=FALSE}
+
+```{r, echo=TRUE} acaro_morango <- read.table("data/acaro.csv", header=T,  sep=";") head(acaro_morango) names(acaro_morango)}
+```
+
+## Podemos adicionar gráficos!
+
+```{r, echo=TRUE}
+x2 <- c(10, 26, 20, 1)
+n2 <- c("Coleoptera", "Hymenoptera", "Diptera", "outras")
+c2 <- c(2,3,4,5)
+pie(x2, labels = n2, col = c2, main = "Ordens de insetos  
+    capturadas em armadilhas Mcphail")
+
+```
+
+## Podemos incluir figuras!
+
+    Existem dois modos:  
+
+a)  Digite: ! [ ] (figuras/nome da figura.png). Deste modo a figura vai aparecer no local onde você escreveu este código. **Importante** ter uma pasta com as figuras salvas no teu diretório!
+
+b)  Apertar o botão inserir e clicar em figura. Ali vai abrir a janela onde será possivel achar teu arquivo seja do computador ou internet.
+
+EXEMPLO: ![](images/ufpr.png)
+
+## Opções para rodar o documento -- botão Run
+
+![](images/Figura%207.png){width="587"}
+
+Ali existem opções variadas para ir rodando trechos do script ou apenas partes deste.
+
+## PDF e LaTeX
+
+-   Para **knit** um slide em PDF será necessario instalar LaTeX no teu computador.
+
+-   O LaTeX é um programa de edição de texto, o qual é usado para converter R Markdown no formato de texto para PDF.
+
+### Baixando e instalando LaTeX
+
+-   LaTeX é livre.
+    -   Procure em: <https://www.tug.org/begin.html> para descarregar
+-   Dependendo de tua velocidade de conecção com internet, esta instalação pode ser um tanto lenta, devido ao tamanho do documento que se deve baixar.
+
+## Considerações finais
+
+-   R Markdown é uma boa ferramenta para gerar documentos, especialmente para publicar em internet;\
+
+-   Exige no inicio um pouco de esforço para aprender a usá-lo.
+
+-   Para maiores informações sobre o R Markdown visite o site indicado:
+
+    -   <http://rmarkdown.rstudio.com/>
+
+## Obrigada pela atenção
+
+**Emily Silva Araujo**\
+[*araujosemily\@gmail.com*](mailto:araujosemily@gmail.com){.email}

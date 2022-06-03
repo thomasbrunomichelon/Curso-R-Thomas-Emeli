@@ -1,0 +1,657 @@
+---
+title: "Estatistica experimental"
+author: "Thomas Bruno Michelon"
+e-mail: "thomasbrunomichelon@gmail.com"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  ioslides_presentation:
+    css: ../../style.css
+    logo: ../../curso-agro-r-logo.png
+    smaller: yes
+    widescreen: yes
+  slidy_presentation: default
+subtitle: Curso R para agronomia
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(paged.print=FALSE)
+knitr::opts_chunk$set(echo=TRUE)
+knitr::opts_chunk$set(error=FALSE)
+knitr::opts_chunk$set(message=FALSE)
+knitr::opts_chunk$set(warning=FALSE)
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
+```
+
+# Delineamento
+
+## Delineamento Inteiramente Casualizado (DIC)
+
+**Delineamento** é o controle do pesquisador sobre o experimento. Quando um local é homogêneo, não é necessário controlar onde serão colocadas as repetições e tratamentos, esses, podem *apenas* serem distribuidos aleatóriamento no local. Isso é im DIC.
+
+O modelo para determinar o valor de cada observação é:
+
+$$
+Y_{ij}=\mu+T_j+\varepsilon_{ij}
+$$
+
+$$
+\varepsilon \sim N(0, I\sigma^2)
+$$
+
+Sua resposta ($Y$), na repetição $i$ do nível $j$ do tratamento, é igual a média geral ($\mu$), somado ao efeito do tratamento e ao erro (os quais devem ser normais). Já o efeito do tratamento ($T_j$) é a diferença entre a média geral e a média de cada um dos níveis: $\mu-T_j$.
+
+Se quisermos estimar apenas a média:
+
+$$
+\mu_{j}=\mu+T_j
+$$
+
+A média ($\mu$) no nível $j$ do seu tratamento é igual a média geral somada ao efeito do tratamento.
+
+## Exemplo
+
+Experimento com consumo de 5 doses de farinha (0, 5, 10,15 - coluna "trat"), onde foi medido o índice glicemico (coluna "ig").
+
+```{r, echo = F}
+library(ExpDes.pt); library(knitr); library(kableExtra)
+dados <- ex1 # carregar os dados (ex1) armazenar em "dados"
+d1 <- dados[1:8,]; d2 <- dados[9:16,]; d3 <- dados[17:24,]
+kable_classic(kable(list(d1, d2, d3), row.name=F), full_width=F, font_size = 20)
+```
+
+A média geral (de toda a coluna ig) é: $97.2$, esse é nosso $\mu$. Se fizermos a média **por** tratamento, teremos: dose 0 = $102.2$; dose 5 = $95.1$; dose 10 = $96.7$; dose 15 = $94.7$.
+
+Repare que dependendo do tratamento, a média dele é maior ou menor que nossa média geral, o quanto maior ou menor é o nosso **efeito do tratamento**. Por exemplo: o efeito da dose 0 é aumentar $5$ unidades da média geral ($97.2 - 102.2$).
+
+## Exemplo no R - DIC fatorial simples
+
+Ao invés do R utilizar a formula para estimar a média $\mu_j=\mu+T_j$. O R utiliza ela de forma simplificada, sem a média geral: $\mu_j=T_j$.
+
+Dessa maneira, é usado o primeiro nível como base o efeito dos demais níveis são somados a ele.
+
+### Carregando os dados
+
+```{r, results = 'hide'}
+library(ExpDes.pt) # carregar o pacote que tem os dados de exemplo (ex1)
+dados <- ex1 # carregar ex1 armazenar em "dados"
+dados$trat <- as.factor(dados$trat) # Entender que "trat" é um fator e não números
+head(dados) # mostrar só o começo (head) dados
+```
+
+## Exemplo no R - DIC fatorial simples
+
+### Criando o modelo
+
+$$
+lm(formula, data,...)
+$$
+
+**lm()** significa "linear models" e nela podemos inserir a fórmula do DIC: **Resposta\~Tratamento** ($\mu_j=T_j$).
+
+```{r}
+lm(ig~trat, data = dados) # modelo
+
+```
+
+Repare, $102.198$ ("intercept") é a média da dose 0, ele foi utilizado como "base", trat5 é a diferença entre a média da dose 0 e a média da dose 5, ou seja, $95.058 - 102.198 = -7.140$.
+
+## Exemplo no R - DIC fatorial duplo
+
+Quando temos mais tratamentos na nossa pesquisa, devemos inserir não só o efeito desses tratamentos, mas também o efeito da interação:
+
+$$
+ \mu_{jh}=T_j+T_h+T_J*T_h
+$$
+
+### Carregando os dados
+
+Experimento em campo para testar a compostagem de casca de café misturada ou não com esterco bovinos (variável esterco) em diferentes intervalos de revolvimento (variável revol).
+
+```{r}
+library(ExpDes.pt) # carregar o pacote que tem os dados de exemplo (ex4)
+dados <- ex4 # armazenar ex4 em "dados"
+dados$revol <- as.factor(dados$revol) # entender que "trat" é um fator e não números
+dados # mostrar os dados
+```
+
+## Exemplo no R - DIC fatorial duplo
+
+### Criando o modelo:
+
+No R, a notação é **Resposta\~Tratamento1+Tratamento2+Tratamento1**$*$**Tratamento2** ou por sua forma abreviada: **Resposta\~Tratamento1\*Tratamento2**.
+
+```{r}
+lm(c~revol*esterco, data=dados)
+```
+
+Repare que no fatorial duplo, foi utilizada a média da resposta no intervalo de revolvimento 5 (primeiro nível do tratamento 1) com a presença de esterco (primeiro nível do tratamento 2). É o valor 19.6667 indicado no "intercept" e os demais valores são a diferença em relação ao "intercept".
+
+## Demais fatoriais
+
+Para um fatorial triplo ou qualquer que seja a quantidade de tratamentos que possui, basta utilizar a mesma notação anterior, apenas acrescentando "\*" e o novo tratamento:
+
+$$
+Resposta\sim Tratamento1*Tratamento2*Tratamento3…
+$$
+
+## Delineamento em Blocos Casualizados (DBC)
+
+Nesse delineamento é feito o controle da área experimental, pois, essa é heterogênea. Então subdivide-se essa área em blocos, os quais são homogeneos dentro deles, então podemos distribuir nossos tratamentos em cada bloco:$$
+\mu_{ij}=\mu+bloco_i+T_j
+$$
+
+Ou seja, a média de um dos níveis ($j$) do seu tratamento, em um dos blocos ($i$), vai ser igual à média geral ($\mu$) somado aos efeitos do tratamento ($T_j$) e do bloco.
+
+## Exemplo no R - DBC Fatorial simples
+
+### Carregando os dados
+
+Dados do livro Pimentel-Gomes da produção ($t. ha^{-1}$) de oito variedades de batatinha em DBC (quatro blocos).
+
+```{r}
+# lendo dados do repositório online
+dados <- dget("https://raw.githubusercontent.com/thomasbrunomichelon/data/main/Pimentel%20gomes%20DBC")
+dados
+```
+
+## Exemplo no R - DBC Fatorial simples
+
+### Criando modelo
+
+A notação do DBC é: **Resposta\~Bloco+Tratamento**.
+
+```{r}
+lm(producao~bloco+variedade, data=dados)
+```
+
+## Demais delineamentos
+
+Para os demais delineamentos, basta saber qual é o modelo e inserí-lo na função **lm()**:
+
+-   Quadrado latino: **Resposta\~linha+coluna+tratamento**
+
+-   Tratamento adicional: **Resposta\~Tratamento adicional+Tratamento\***
+
+    -   Para o tratamento adicional, é necessário criar uma nova variável e atribuir um valor para o tratamento adicional e outro valor para os demais tratamentos. Ex.: uma coluna com "a" para o tratamento adicional e "b" para os demais.
+
+Para delineamentos com efeitos fixos e aleatórios (como no caso de parcelas subdividadas), deve-se utilizar a função **aov()**.
+
+-   Parcela subdividida em DIC: **Resposta\~Fator1\*Fator2+Erro(Fator1:repetição)**
+
+-   Parcela subdividida em DBC: **Resposta\~Bloco+Fator1\*Fator2+Erro(bloco/Fator1)**
+
+# ANOVA
+
+## Porque a ANOVA?
+
+Se quisermos testar um tratamento com dois níveis A e B, basta fazer um teste T para as médias. Porém, se temos um tratamento com mais níveis A, B e C, já teriamos três testes: AB, AC e BC. Quanto mais testes, maior a chance de errarmos, visto que os testes têm uma "probabilidade de acerto".
+
+Uma alternativa é testar ao invés da média, as variâncias das médias: **variância entre os níveis vs variância dentro de cada nível.**
+
+Assim, independente do número de níveis, estariamos fazendo apenas um teste e testando "todas as médias de uma vez".
+
+## Pressupostos
+
+Os pressupostos que devemos checar para análise de variância são em relação ao resíduo (ou erros), ou seja, a diferença entre o que foi medido e o estimados pelo modelo.
+
+O erros devem ser:
+
+-   Independentes: os erros não devem apresentar correlação entre si.
+-   Variância homogênea (homocedásticos): os erros devem variar de forma igual.
+-   Normais: erros com média igual a 0 e variância igual $\sigma^2$.
+
+## Testes dos pressupostos
+
+Os testes são aplicados aos erros. Dessa forma, devemos primeiro ajustar o modelo, encontrar o erro e aí aplicar os testes:
+
+```{r}
+library(ExpDes.pt)
+dados <- ex1
+dados$trat <- as.factor(dados$trat)
+modelo <- lm(ig~trat, data=dados)
+erros <- residuals(modelo) # função "residuals" para obter os erros
+```
+
+-   Normalidade dos resíduos: teste de Shapiro-Wilk:
+
+    $$
+    shapiro.test(object,...)
+    $$
+
+```{r}
+shapiro.test(erros)
+```
+
+## Testes dos pressupostos
+
+-   Homogeneidade das variâncias dos resíduos: teste de Levene e Bartlett
+
+    $$
+    leveneTest(object, data,...)
+    $$
+
+```{r}
+library(car) # pacote com a função
+leveneTest(erros~trat, data=dados) # Levene
+```
+
+$$
+bartlett.test(object, data,...)
+$$
+
+```{r}
+bartlett.test(erros~trat, data=dados)
+```
+
+## Testes dos pressupostos
+
+-   Independência dos resíduos: teste de Durbin-Watson
+
+    $$
+    durbinWatsonTest(model,...)
+    $$
+
+```{r}
+library(car)
+durbinWatsonTest(modelo)
+```
+
+## Análise gráfica dos pressupostos
+
+Se usarmos a função **plot()** em um modelo que criamos com a função **lm()**, são gerados quatro gráficos para análise dos resíduos:
+
+```{r out.width = "100%"}
+modelo <- lm(ig~trat, data=dados)
+par(mfrow=c(2,2))
+plot(modelo)
+```
+
+## Transformações
+
+Se seus dados não são normais, você pode transformá-los. Existe diversas fórmulas e transformações. Por exemplo, podemos simplesmente elevar nossos dados: $resposta^2$. Ou realizar o logarítimo: $log(resposta)$. Então qual transformação utilizar?
+
+## Box-Cox
+
+Box-Cox é um **família** de transformações, ou seja, em sua fórmula, podemos tranformar nossos dados de diferentes formas conforme um critério. O critério é a escolha de uma váriável chamada $\lambda$.
+
+Quando escolhemos algum valor de $\lambda \neq 0$, os dados ($y$) são transformados conforme a seguinte fórmula:
+
+$$
+y'= (y^\lambda-1)/\lambda
+$$
+
+Quando escolhemos $\lambda=0$, é feito apenas o $log(y)$, na base $e$.
+
+Então basta escolhermos vários valores para lambda, transformar nossos dados e ver qual a melhor transformação.
+
+## Exemplo no R - Box-Cox
+
+```{r, echo=F}
+library(ExpDes.pt)
+dados <- ex1
+dados$trat <- as.factor(dados$trat)
+```
+
+### Identificando o melhor lambda
+
+Podemos testar vários lambdas e avaliar o ajuste automaticamente pela função do pacote **MASS**:
+
+$$
+boxcox(object,...)
+$$
+
+```{r, out.width="50%"}
+library(MASS) # carregando o pacote com a função "boxcox"
+bc <- boxcox(dados$ig~dados$trat) # testando os lambdas e identificando o melhor
+```
+
+Repare que o maior valor de "log-likelihood" gerado no gráfico é quando $\lambda$ é quase 0.
+
+## Exemplo no R - Box-Cox
+
+### Extraindo o lambda
+
+Vamos ver qual exatamente o valor de lambda:
+
+```{r}
+maior_likelihood <- which.max(bc$y) # maior valor do "log likelihood"
+lambda <- bc$x[maior_likelihood] # valor do lambda que corresponde ao maior "log likelihood"
+lambda # valor de lambda
+```
+
+Nosso lambda é $0.02$ aproximadamente. Ou seja, nossos dados transformados ficariam: $y'=y^{0.02}-1/0.02$.
+
+## Exemplo no R - Box-Cox
+
+### Transformando todos os dados
+
+```{r}
+transformacao <- function(y, lambda) {
+      if (lambda == 0L) { # se o lambda for igual a 0, log(y)
+      log(y)
+      } else { # se for diferente de 0, (y^lambda)-1/lambda
+      ((y^lambda) - 1) / lambda
+      }
+  }
+dados_transformados <- transformacao(dados$ig, 0.0202) # transformando
+head(cbind(dados$ig, dados_transformados)) # mostrando os dados lado a lado (cbind)
+```
+
+## ANOVA
+
+$$
+anova(object,...)
+$$
+
+O "object" é o seu modelo obtido pela função **lm()**.
+
+```{r}
+modelo <- lm(ig~trat, data=dados)
+anova(modelo)
+```
+
+# Comparações múltiplas
+
+## Pacote Emmeans
+
+$$emmeans(object, specs, type, … )$$
+
+O "object" é o seu modelo e specs é o argumento responsável pelo desdobramento das médias:
+
+| Número de fatores                       | simbolo | exemplo                               |
+|-----------------------------|---------------|----------------------------|
+| Um fator                                |         | specs = \~ tratamento                 |
+| Dois fatores: fator 1 dentro do fator 2 |  \|     | specs = \~ tratamento1 \| tratamento2 |
+| Dois fatores: todas as combinações      |  \*     | specs = \~ tratamento1 \* tratamento2 |
+
+## Exemplo no R - emmeans fatorial duplo em DIC
+
+### Carregando dados
+
+```{r}
+library(ExpDes.pt)
+dados <- ex4
+dados$revol <- as.factor(dados$revol)
+dados$esterco <- as.factor(dados$esterco)
+```
+
+### Criando o modelo
+
+```{r}
+# elaborando o modelo com lm()
+modelo <- lm(c~revol*esterco, data=dados)
+```
+
+## Exemplo no R - emmeans fatorial duplo em DIC
+
+### Comparando as médias
+
+```{r}
+library(emmeans)
+medias <- emmeans(modelo, specs = ~ revol|esterco)
+# Usando o pacote multcomp para facilitar a visualização por meio das "letras"
+library(multcomp)
+cld(medias, Letters = LETTERS, reversed = TRUE)
+```
+
+## Pacote Exp.des
+
+O pacote Exp.des, engloba diversos delinementos e realiza os procedimentos automaticamente: ANOVA, testes de pressupostos e comparação de médias.
+
+Basta usar a função conforme o seu delineamento: **dic()**, **dcb()**, **fat2.dic()**, **fat3.dic()**, **fat2.dbc()**, **fat3.dbc()**, entre outras.
+
+$$
+dic(trat,  resp,  quali = TRUE,  mcomp = "tukey",...)
+$$
+
+Em cada função, existem os argumentos básicos utilizados para realizar a análise:
+
+| Argumento | Função                                                        |
+|---------------|---------------------------------------------------------|
+| trat      | variável tratamento                                           |
+| resp      | variável resposta                                             |
+| quali     | se os tratamentos são (TRUE) ou não (FALSE) qualitativo       |
+| mcomp     | teste de comparação de testes (Tukey, Scott-Knott, Duncan...) |
+
+Consulte o "?Exp.des para" ver todas as funções do pacote e acessar os demais argumentos da função escolhida.
+
+## Exemplo no R - Exp.des DIC Fatorial duplo
+
+```{r}
+library(ExpDes.pt)
+fat2.dic(dados$revol, dados$esterco, dados$c)
+```
+
+# Modelos Lineares Generalizados (GLM)
+
+## O que são?
+
+Alguns dados são claramente pertencentes a outra distribuição que não a normal. Como por exemplo, dados de contagem (ex., número de plantas daninhas), dados binomiais (ex., germinação ou não germinação).
+
+Assim, num modelo linear generalizado (GLM), assume-se que seus dados são de alguma dessas distribuições (pertencente a familia exponencial de distribuição) e a **média dessa distribuição** depende das suas variáveis explicativas (por exemplo, o tratamento que você aplicou).
+
+Porém, a média de outras distribuições não é uma simples combinação linear dos tratamentos e seus coeficientes, como ocorre nos modelos lineares ($\beta_1*Nível_1+\beta_2*Nível_2$). Para contornar esse problema, transforma-se a média dessa distribuição, por meio de uma função de ligação ($g$):
+
+$$
+g(\mu_j)=\mu+tratamento_j
+$$
+
+Dessa forma, conseguimos análisar nossos dados na distribuição original.
+
+## Por que?
+
+Quando temos dados não normais, o que geralmente é feito:
+
+1.  Transformar os dados.
+2.  Utilizar uma estatística não paramétrica.
+3.  Ignorar a não normalidade e prosseguir com a análise.
+
+Porém, uma quarta alternativa é testar alguma outra distribuição, a qual não exige os pressupostos da normalidade ou que seja mais bem ajustada aos dados.
+
+## Algumas distribuições
+
+-   **Poisson**: utilizada para dados de contagem (número de ovos de inseto, surgimento de plantas daninhas). Exige que a variância dos dados seja igual a média e se ela for maior, é chamado de superdisperção, o que deve ser testado.
+
+    ```{r, echo=F, out.width="50%"}
+    hist(rpois(1000000, 3), breaks = 50, main = "Distribuição poisson", xlab="Observações", ylab="Frequência")
+
+    ```
+
+    ## Algumas distribuições
+
+-   **Binomial**: usada para dados com resposta mutuamente exclusiva, ou seja, sucesso ou fracasso (germinação de sementes, morte de insetos).
+
+```{r, echo=F, out.width="50%"}
+hist(rbinom(1000000, 10,0.5), breaks = 50, main = "Distribuição binomial", xlab="Observações", ylab="Frequência")
+```
+
+## Algumas distribuições
+
+-   **Gamma**: usada em dados contínuos e positivos (comprimento de raiz).
+
+```{r, echo=F, out.width="50%"}
+hist(rgamma(1000000, 3), breaks = 50, main = "Distribuição gamma", xlab="Observações", ylab="Frequência")
+```
+
+-   **Outras distribuições:** <https://en.wikipedia.org/wiki/Exponential_family>
+
+## Exemplo no R - GLM
+
+Semelhante ao **lm()**, a função para criar o modelo é:
+
+$$
+glm(formula, family, data,...) 
+$$
+
+Em family, podemos ecolher a distribuição:**"binomial"**, **"poisson"**, **"gamma"**, entre outras.
+
+A "ANOVA de um GLM" se chama Análise de Deviance e é usada a partir da mesma função **anova()**. Porém, devemos especificar o teste conforme a distribuição escolhida:
+
+| Distribuição      | Teste    | Como fica                       |
+|-------------------|----------|---------------------------------|
+| Normal, gamma,    | F        | **anova(modelo, test="F")**     |
+| Binomial, poisson | $\chi^2$ | **anova(modelo, test="Chisq")** |
+
+## Exemplo no R - GLM Binomial
+
+### Carregando os dados
+
+Experimento avaliando germinação de oito repetições de 25 sementes armazenadas por quatro meses em dois tipos de embalagem (0.1mm e 0.2mm).
+
+```{r}
+dados <- dget("https://raw.githubusercontent.com/thomasbrunomichelon/data/main/germinacao")
+str(dados)
+```
+
+## Exemplo no R - GLM Binomial
+
+### Criando a variável resposta
+
+Criando uma nova variável com duas colunas, uma com a germinação e a outra com as sementes que não germinaram (25 sementes - o total germinado).
+
+```{r}
+resposta <- cbind(dados$germ, 25-dados$germ)
+head(resposta)
+```
+
+## Exemplo no R - GLM Binomial
+
+### Criando o modelo e realizando a análise de deviance
+
+```{r}
+modelo <- glm(resposta ~ armazenamento*embalagem, data=dados, family="binomial")
+anova(modelo, test="Chisq")
+```
+
+## Exemplo no R - GLM Binomial
+
+### Comparação de médias
+
+```{r}
+library(emmeans)
+médias <- emmeans(modelo, specs=~armazenamento|embalagem, type="response")
+library(multcomp)
+cld(médias, Letters=LETTERS, reverse=TRUE)
+```
+
+## Exemplo no R - GLM Poisson
+
+### Carregando os dados
+
+Experimento avaliando o número de plântulas emergidas de três lotes de sementes, beneficiadas em peneiras com quatro crivos diferentes (testemunha, 0,84mm, 1mm, 1,18mm).
+
+```{r}
+dados <- dget("https://raw.githubusercontent.com/thomasbrunomichelon/data/main/contagem%20plantulas")
+str(dados)
+```
+
+### Criando o modelo
+
+```{r}
+modelo <- glm(plantulas~lote*peneira, data=dados, family="poisson")
+```
+
+## Exemplo no R - GLM Poisson
+
+### Checando o pressuposto
+
+```{r}
+library(AER)
+dispersiontest(modelo)
+```
+
+## Exemplo no R - GLM Poisson
+
+### Análise de deviance
+
+```{r}
+anova(modelo, test="Chisq")
+```
+
+## Exemplo no R - GLM Poisson
+
+### Comparação de médias
+
+```{r}
+library(emmeans)
+médias <- emmeans(modelo, specs=~peneira|lote, type="response")
+library(multcomp)
+cld(médias, Letters=LETTERS, reverse=TRUE)
+```
+
+# Comparação de modelos
+
+## Critério de Akaike (AIC)
+
+O AIC avalia duas coisas: o ajuste do modelo e o número de parâmetros. Quanto melhor o ajuste, melhor o modelo, porém, se o modelo precisou de muitos parâmetros para se ajustar, pior ele é.
+
+$$
+AIC=2k-2ln(L)
+$$
+
+A fórmula do AIC é relativamente simples, nela contém uma parte relativa ao número de parâmetros ($k$) e outra parte relativa ao ajuste, por meio do valor máximo do chamado *likelihood* ou verossemilhança ($L$).
+
+Reparem que de acordo com a fórmula, quanto mais parâmetros (parte positiva) e/ou quanto menor o ajuste (parte negativa), maioro valor de AIC. Logo, **quanto menor o valor de AIC melhor o modelo**.
+
+## Exemplo no R - AIC
+
+### Carregando dados
+
+Usaremos os dados do experimento referente ao número de plântulas emergidas.
+
+```{r}
+dados <- dget("https://raw.githubusercontent.com/thomasbrunomichelon/data/main/contagem%20plantulas")
+str(dados)
+```
+
+## Exemplo no R - AIC
+
+### Criando modelo normal e checando os pressupostos
+
+```{r}
+modelo_normal <- lm(plantulas~lote*peneira, data=dados)
+erros <- residuals(modelo_normal)
+shapiro.test(erros)
+library(car)
+leveneTest(erros~lote*peneira, data=dados)
+durbinWatsonTest(modelo_normal)
+```
+
+## Exemplo no R - AIC
+
+### Criando modelos Poisson e binomial negativa
+
+```{r}
+modelo_poisson <- glm(plantulas~lote*peneira, data=dados, family="poisson")
+library(MASS)
+modelo_binomial_negativa <- glm.nb(plantulas~lote*peneira, data=dados)
+```
+
+## Exemplo no R - AIC
+
+### AIC
+
+$$
+AIC(object,...)
+$$
+
+```{r}
+AIC(modelo_normal, modelo_poisson, modelo_binomial_negativa)
+```
+
+## O que realmente muda?
+
+Se os dados são normais, por que testar outros ajustes?
+
+```{r}
+library(emmeans)
+media_normal <- emmeans(modelo_normal, specs=~lote|peneira)
+media_poisson <- emmeans(modelo_poisson, specs=~lote|peneira)
+library(multcomp)
+letras_normal <- cld(media_normal, Letters = LETTERS, reversed = T)
+letras_poisson <- cld(media_poisson, Letters = LETTERS, reversed = T, type="response")
+cbind(letras_normal, letras_poisson)[,c(1,2,8,16)]
+
+```
+
+## Referências
