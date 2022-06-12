@@ -1,0 +1,222 @@
+---
+title: "Contrastes de sinais de Wilcoxon"
+author: "Emily Silva Araujo e Thomas Bruno Michelon"
+date: '2022-06-04'
+output: ioslides_presentation
+---
+
+## **Contraste de intervalos de sinais de Wilcoxon**
+
+**O que é?**
+
+-   Teste utilizado para comparar se dois grupos possuem a mesma medida de tendência central.\
+-   Pode ser usado para avaliar se os dados de uma população tem uma determinada mediana.\
+-   Leva em consideração a magnitude das diferenças entre os pares de dados.\
+
+## **O que é?**
+
+-   Compara se as diferenças entre pares de dados seguem uma distribuição simétrica ao redor de um valor.\
+-   Tem menor poder estatistico (menor probabilidade de rejeitar a hipotese nula quando realmente é falsa) porque ignora os valores extremos. Porém é mais robusto que outros testes paramétricos, como o t-test.
+
+## **Pressupostos**
+
+-   A variável é de natureza contínua, porém a prova pode ser aplicada em variáveis medidas em intervalo.\
+-   A amostra é proveniente de uma população com distribuição simétrica, de forma que, a mediana e a média seriam iguais, e assim, a hipótese sobre a mediana aplicaria-se para a média;\
+-   A diferença com o teste de sinais, esta no fato de que o teste de Contraste de intervalos de sinais de Wilcoxon considera não apenas a posição da observação (ranking), mas também a sua magnitude;\
+
+## **Pressupostos**
+
+-   Os dados tem que ser dependentes;\
+-   Os dados devem poder ser ordenados do menor para o maior e vice-versa;\
+-   Não é necessario assumir que as amostras se distribuam de forma normal ou que procedam de populações normais. Entretanto, seja qual seja o tipo de distribuição das diferenças, deve ser simétrica.
+
+## **Hipótese**
+
+-   Hipótese nula: a mediana (Me) é igual a um certo valor, Me0\
+-   H0: Me = Me0\
+-   Hipóteses alternativas (Ha):\
+-   Ha: Me ≠ Me0\
+-   Ha: Me \> Me0\
+-   Ha: Me \< Me0
+
+## **Estatístico de prova**
+
+-   Se classifica cada observação xi com sinal "--" se esta toma valores menores que Me0, ou com sinais " + " se os valores são maiores que Me0.\
+-   Para cada observação se calcula o valor absoluto da diferença entre xi menos Me0, o que chamamos \|Di\|.\
+-   Este resultado se ordena de menor para maior, e se associa a uma posição (ranking pi) que ocupam dentro do total de n observações.\
+-   O estatístico de prova T+ corresponde a soma dos rankings associados as observações com o sinal positivo ("+").
+
+## **Empates e zeros**
+
+Podem surgir duas situações durante a análise: 
+
+a)  Ocorrer um empate, isto é, diferentes observações tenham o mesmo valor do estatístico de prova; ocasionando que não seja possível associar um intervalo a cada observação; 
+
+b)  Presença de zeros, ou seja, xi é igual a Me0, ocasionando que não seja possível colocar um sinal "+" ou "-".
+
+## **Empates e zeros**
+
+-   Quando ocorre o primeiro caso, uma alternativa é associar a média dos intervalos iniciais a cada uma das observações que apresentam o empate. 
+
+-   Se ocorrem as duas situações, deve ser realizado um ajuste sobre o valor esperado e a variância de T+.
+
+## **Como se calcula o contraste de intervalos de sinais de Wilcoxon?**
+
+O teste de contraste de intervalos de sinais de Wilcoxon se executa com as funções wilcox.test, contida dentro do pacote MASS, e Wilcoxsigned_test(), contida no pacote coin. 
+
+-   Wilcoxsigned_test() permite calcular o p-valor exato, quando ocorra empates, enquanto wilcox.test não faz isto; 
+
+-   A função wilcoxsigned_test () requere passar os argumentos em forma de função (\~), motivo pelo qual os dados devem estar armazenados em formato de data frame. 
+
+## **Como se calcula o contraste de intervalos de sinais de Wilcoxon?**
+
+-   Os dois comandos calculam o estatístico T+, eliminando os valores de Di = 0; 
+
+-   wilcox.test permite realizar o ajuste por continuidade para o cálculo do p-valor, aproximando pela distribuição normal.
+
+------------------------------------------------------------------------
+
+Os argumentos que a função wilcox.test usa por padrão são:\
+wilcox.test (x, alternative="two.sided", mu=0,exact=T, correct=T)
+
+-   x= é o vetor de observações\
+-   alternative: permite escolher o tipo de teste que se vai executar:\
+
+a)  bilateral (que é o padrão)\
+b)  less, se a hipótese nula, a qual desejamos contranstar, é menor\
+c)  greater, se a hipótese nula, a qual desejamos contranstar, é maior
+
+------------------------------------------------------------------------
+
+-   mu= permite sinalizar que valor da hipótese será contrastado. Assume o valor zero por padrão.\
+-   exact: indicamos se R deve calcular o valor exato ou aproximado da distribuição do estatístico T+ de Wilcoxon\
+-   exact = T (é a opção padrão)\
+-   exact= F irá fornecer o p-valor aproximado\
+-   correct: indica se desejamos utilizar a correção de continuidade
+
+Observação: Devem ser eliminadas da amostra os valores iguais aos da hipótese a contrastar
+
+## **Exemplo: estudo de caso**
+
+-   A mosca *Drosophila susuki* é considerada uma importante praga de pequenas frutas, como o morango, mirtilo, amora, framboesa, etc.
+
+#### Macho e fêmea de *Drosophila suzukii*
+
+![](figuras/Drosophila-suzukii.jpg){width="410"}
+
+## Problema
+
+-   Os danos são causados quando esta mosca oviposita dentro dos frutos, podendo ocasionar queda prematura, no caso do mirtilo, e também o desenvolvimento de larvas no interior do fruto. Estas larvas consomem a polpa acelerando o processo de senescência do fruto.
+
+### **Ciclo de vida de** *Drosophila suzukii*
+
+![](figuras/Drosophila_ciclo.jpg){width="287" height="266"}
+
+## Motivação da investigação
+
+-   O uso de baixas temperaturas pode contribuir para inibir o desenvolvimento das formas imaturas (ovos e larvas) desta mosca em frutos infestados e desacelerar o declínio da qualidade visual destes frutos durante a comercialização.
+
+## **Metodologia**
+
+A qualidade visual de frutos de morango, a qual reflete a deterioração causada pelo processo de senecêscia e danos ocasionados pela mosca *Drosophila suzukii*, foi avaliada por um consumidor, o qual dividiu os frutos em cinco classes:
+
+5 = excelente, 4= bom, 3= aceitável, 2=ruim, 1=inaceitável, de acordo com sua opinião, nos dias 1, 3, 5 e 7 dias após a colheita.
+
+Foram avaliados dois grupos de frutos:\
+a) frutos mantidos refrigerados a 3 ° C desde a colheita\
+b) frutos mantidos a temperatura ambiente (21 °C)
+
+## Pergunta:
+
+A refrigeração dos frutos de morangos, previamente infestados, permite manter a qualidade visual destes com nota superior a 2 (=aceitável) até os 7 dias após a colheita?
+
+------------------------------------------------------------------------
+
+```{r, echo=TRUE}
+library(MASS)  
+
+morango_refrigerado<-c(5,4,5,4,4,5,4,3,4,3,3,4,3,3,3,3,2,3,2,2,3,1,2,3)
+
+wilcox.test(morango_refrigerado, mu=2,exact=F,alternative = "g",conf.int = 0.95) 
+
+```
+
+## Conclusão
+
+O tratamento de refrigeração dos frutos consegue manter a sua qualidade visual com nota superior a 2 até 7 dias após a colheita.
+
+## Pergunta
+
+A qualidade visual de frutos de morangos, previamente infestados por larvas de mosca *D. suzukii* e submetidos a cadeia de frio e temperatura ambiente, foi avaliada. Estes frutos receberam notas no primeiro dia e aos 5 dias após a colheita.
+
+```{r, include=FALSE}
+
+# Dados
+m1_TA<-c(5,5,4,4,4,5,4,4,4,4,5,4,5,4,4,5)
+m5_TA<-c(3,2,2,2,2,3,2,3,2,2,3,2,2,2,2,3)
+diferenças <- c(m1_TA - m5_TA)
+
+rbind(m1_TA, m5_TA, diferenças)
+ranksdiferenças <- rank(abs(diferenças[diferenças != 0])) 
+ranksdiferenças <- c(ranksdiferenças[1:14], 0, ranksdiferenças[16]) 
+
+```
+
+```{r, include=FALSE}
+
+tabela <- data.frame(m1_TA = m1_TA, m5_TA = m5_TA, sinal = sign(diferenças),
+                    diferença = abs(diferenças), rank = ranksdiferenças)
+
+m1_r<-c(5,4,4,4,5,5,4,5,4,5,5,4,5,4,5,4)
+m5_r<-c(4,3,4,2,3,3,3,3,2,3,3,3,3,2,3,2)
+diferenças1 <- c(m1_r - m5_r)
+
+rbind(m1_r, m5_r, diferenças1)
+tabela1 <- data.frame(m1_r = m1_r, m5_r = m5_r, sinal = sign(diferenças),
+                    diferenças = abs(diferenças1), rank = ranksdiferenças)
+
+```
+
+a)  Existe diferenças na qualidade visual entre o primeiro e aos 5 dias após a colheita para ambos tratamentos?
+
+## wilcox.test, *p-value* aproximado
+
+### Temperatura ambiente
+
+```{r, echo=TRUE, warning=FALSE}
+wilcox.test(m1_TA,m5_TA,paired = T, correct = T,  conf.int = 0.95)
+```
+
+## wilcox.test, *p-value* aproximado
+
+### Temperatura refrigerada
+
+```{r, echo=TRUE, warning=FALSE}
+wilcox.test(m1_r,m5_r,paired = T,exact = F, correct = T,  conf.int = 0.95)
+```
+
+## Wilcoxsign_test (), *p-value* exato
+
+```{r, echo=TRUE, warning=FALSE}
+require(coin)
+morango_refrigerado <- data.frame(m1_r = m1_r, m1_r = m5_r)
+wilcoxsign_test(m1_r ~ m5_r, data = morango_refrigerado, distribution = "exact")
+
+```
+
+## **Conclusão**
+
+O *p-valor* é suficientemente pequeno como para afirmar que existem diferenças com respeito a qualidade visual dos frutos entre os dias 1 e 5, para ambos os tratamentos.
+
+------------------------------------------------------------------------
+
+b)  Existem diferenças na qualidade visual entre os frutos refrigerados e os frutos não refrigerados aos 5 dias após a colheita?
+
+```{r, echo=TRUE, warning=FALSE}
+wilcox.test(m5_TA,m5_r,paired = T,exact = F, correct = T,  conf.int = 0.95)
+
+```
+
+## **Conclusão**
+
+Existem diferenças com respeito a qualidade visual dos morangos submetidos aos tratamentos de refrigeração e sem refrigeração no dia 5 após a colheita.
