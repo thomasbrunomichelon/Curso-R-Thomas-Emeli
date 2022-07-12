@@ -1,0 +1,133 @@
+---
+title: "Teste da mediana"
+author: "Emily Silva Araujo e Thomas Bruno Michelon"
+date: '2022-07-08'
+output: ioslides_presentation
+---
+
+
+## Introdução
+
+- O teste da mediana consiste em executar uma prova de homogeneidade de duas amostras ordenadas em uma tabela de dupla entrada.
+
+### Pressuposto
+
+- Se aplica para variáveis de natureza contínua, medidas ao menos em escala ordinal.
+
+
+## Hipóteses
+
+Hipóteses nula: as k variáveis possuem a mesma distribuição.  
+
+H0:F1(x)=F2(X)=...=Fk(X)  
+
+Hipóteses alternativas:  
+
+Ha:Fi(X)≠Fj(X) para cualquier i≠j.
+
+## Exemplo 1
+Foi realizado um estudo para verificar se o número de pulsações por minuto pode ser considerado igual entre os homens e mulheres de uma determinada população.  
+
+Para isto foram escolhidos ao acaso 12 homens e 12 mulheres.
+
+## Resolvendo
+```{r, echo=TRUE, warning=FALSE}
+Homens <-c(74,77,71,76,79,74,83,79,83,72,79,77)
+Mulheres <-c(81,84,80,73,78,80,82,84,80,84,75,82)
+mediana<-median(c(Homens,Mulheres)) # mediana geral
+mediana
+
+Homens<-c(sum(Homens>mediana),sum(Homens<=mediana))
+Mulheres<-c(sum(Mulheres>mediana),sum(Mulheres<=mediana))
+
+dados1<-as.table(cbind(Homens,Mulheres))
+dados1
+```
+## Resolvendo
+### Teste da mediana
+
+```{r, echo=TRUE, warning=FALSE}
+pulsaciones <- matrix(c(2,10,9,3),ncol=2)
+chisq.test(pulsaciones)
+
+```
+***
+
+```{r, echo=TRUE, warning=FALSE}
+chisq.test(pulsaciones)$expected
+chisq.test(pulsaciones, correct=F)
+```
+
+
+## Solução
+
+- Verificou-se que as frequências esperadas eram todas superiores a 5, de forma que não é necessário aplicar a correção de Yates.  
+
+- Com um p-value <0.01 podemos rejeitar a hipótese de homogeneidade entre as populações de homens e mulheres deste exemplo.  
+
+## Exemplo 2
+
+Deseja-se verificar se há diferença significativa entre os escores de QI de sujeitos com baixa exposição ao chumbo, média exposição ao chumbo e alta exposição ao chumbo. 
+
+Use o nível de significância de 0.05 para testar se as três amostras provêm de populações com medianas iguais.  
+
+
+## Exemplo 2
+
+### **Parâmetros**
+
+- Para a realização desse teste, foi criada uma matriz onde as colunas ainda são os **k** grupos, e as linhas indicam quantos indivíduos de cada grupo estão acima e quantos estão abaixo da mediana geral.   
+
+
+***
+
+Hipóteses: 
+
+- H0: Os grupos possuem medianas semelhates  
+- H1: Ao menos um grupo possue mediana diferente a os demais
+            
+
+## Resolvendo
+```{r, echo=TRUE, warning=FALSE}
+baixo<-c(85,90,107,85,100,97,101,64)
+medio<-c(78,97,107,80,90,83)
+alto<-c(93,100,97,79,97)
+mediana<-median(c(baixo,medio,alto)) # mediana geral
+baixo<-c(sum(baixo>mediana),sum(baixo<=mediana))
+medio<-c(sum(medio>mediana),sum(medio<=mediana))
+alto<-c(sum(alto>mediana),sum(alto<=mediana))
+dados<-as.table(cbind(baixo,medio,alto))
+dados
+```
+
+## Solução
+```{r, echo=TRUE, warning=FALSE}
+chisq.test(dados)$expected # verificando que as frequências
+
+chisq.test(dados)
+
+
+```
+## Observação
+
+- os dados não atendem o requisito do Teste Qui-Quadrado de que todas as frequências esperadas devem ser maiores que **5**.
+
+- Desta forma deveria ser realizado o teste exato de Fisher!!!
+
+
+***
+ 
+```{r, echo=TRUE, warning=FALSE}
+fisher.test(x = dados, alternative = "two.sided")
+
+```
+
+- Não há evidências para rejeitar H0 (p=0,7272), ou seja, não há evidencias suficientes para afirmar que as medianas dos grupos são diferentes.  
+
+
+
+## Referências
+
+https://rpubs.com/cjrr/puj_decb_np
+
+Garcia, A. Estadística aplicada com R. UNED, Madrid, 2012.
