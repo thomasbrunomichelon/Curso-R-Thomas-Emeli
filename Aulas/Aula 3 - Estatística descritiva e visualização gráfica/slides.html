@@ -3265,7 +3265,7 @@ summary(object, …)
 <pre class = 'prettyprint lang-r'>library(ExpDes.pt) # carregando o pacote com dados de exemplo (ex4)
 dados &lt;- ex4 # armazenando ex4 em &quot;dados&quot;
 dados$revol &lt;- as.factor(ex4$revol) # transformando a variável revol em fator
-summary(dados[1:7]) # resumo das colunas 1 a 7</pre>
+summary(dados[1:6]) # resumo das colunas 1 a 6</pre>
 
 <pre >##  revol  esterco       rep          c               n               k        
 ##  5 :6   com:12   Min.   :1   Min.   :15.00   Min.   :0.960   Min.   :1.650  
@@ -3273,14 +3273,7 @@ summary(dados[1:7]) # resumo das colunas 1 a 7</pre>
 ##  15:6            Median :2   Median :22.50   Median :1.635   Median :4.880  
 ##  20:6            Mean   :2   Mean   :24.33   Mean   :1.667   Mean   :5.043  
 ##                  3rd Qu.:3   3rd Qu.:29.25   3rd Qu.:1.870   3rd Qu.:5.625  
-##                  Max.   :3   Max.   :37.00   Max.   :2.280   Max.   :7.800  
-##        p        
-##  Min.   :1.560  
-##  1st Qu.:2.357  
-##  Median :3.340  
-##  Mean   :3.098  
-##  3rd Qu.:3.710  
-##  Max.   :4.310</pre>
+##                  Max.   :3   Max.   :37.00   Max.   :2.280   Max.   :7.800</pre>
 
 </article></slide><slide class=""><hgroup><h2>Medidas de posição</h2></hgroup><article  id="medidas-de-posição" class="smaller ">
 
@@ -3292,7 +3285,21 @@ aggregate(x,FUN,...)
 <li><strong>x</strong> deve ser escrito em forma de função, ou seja, se você quer calcular al</li>
 </ul>
 
+<p>média</p>
+
+<p>mediana</p>
+
+<p>max</p>
+
+<p>minimo</p>
+
 </article></slide><slide class=""><hgroup><h2>Medidas de dispersão</h2></hgroup><article  id="medidas-de-dispersão" class="smaller ">
+
+<p>variância</p>
+
+<p>Desvio padrão</p>
+
+<p>CV (%)</p>
 
 </article></slide><slide class="segue dark nobackground level1"><hgroup class = 'auto-fadein'><h2>Visualização de dados</h2></hgroup><article  id="visualização-de-dados" class="smaller ">
 
@@ -3342,67 +3349,28 @@ aggregate(x,FUN,...)
 
 </article></slide><slide class=""><hgroup><h2>Estrutura básica do ggplot - Função aes()</h2></hgroup><article  id="estrutura-básica-do-ggplot---função-aes" class="smaller ">
 
-<p>Quem vai no eixo X e no Y? Devo separar por níveis? Essas questões que a função <strong>aes()</strong> responde.</p>
+<p>Quem vai no eixo X e no Y? Devo separar por níveis? Essas questões a função <strong>aes()</strong> responde:</p>
 
-<p>Principais argumentos da função aes()</p>
+<p>\[
+aes(x,\;y,\;color,\;fill,\; size,\;group,...)
+\]</p>
 
-<table class = 'rmdtable'>
-<tr class="header">
-<th align="left">Col1</th>
-<th align="left">Col2</th>
-<th align="left">Col3</th>
-</tr>
-<tr class="odd">
-<td align="left">x</td>
-<td align="left">variável que irá no eixo x e y</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">y</td>
-<td align="left">variável que irá no eixo y</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">fill</td>
-<td align="left">Preencher com cores</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">color</td>
-<td align="left">Colorir</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">group</td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left"></td>
-<td align="left"></td>
-<td align="left"></td>
-</tr>
-</table>
+<ul>
+<li><p><strong>x</strong> e <strong>y</strong> são as variáveis que vão nos eixos.</p></li>
+<li><p><strong>fill</strong> e <strong>color</strong> são utilizado para atribuir uma cor ou preenchimento para cada categoria da variável que você especificou. Se for uma variável quantitativa, será criada uma escala de cor. <em>Fill</em> é para gráficos que possuam &ldquo;espaço interno&rdquo; preencher, como gráfico de colunas ou boxplot, já em pontos e linha usá-se <em>color</em>.</p></li>
+<li><p><strong>size</strong> é utilizado para atribuir uma escala de tamanho conforme a variável que você específicou.</p></li>
+<li><p><strong>group</strong> é utilizado para quando você não quer necessáriamente trocar a aparência do seu gráfico conforme uma variável, apenas sinaliziar que há grupos diferentes. Isso é comum quando se quer adicionar linhas múltiplas linhas de regressão.</p></li>
+</ul>
 
 </article></slide><slide class=""><hgroup><h2>Estrutura básica do ggplot - Função geom_…()</h2></hgroup><article  id="estrutura-básica-do-ggplot---função-geom_" class="smaller ">
 
 <p>O tipo de gráfico depende da categoria da suas variáveis e o tipo de informação que você busca. O ggplot possui muitos tipos de gráficos e o nome da função geralmente é <strong>geom_</strong> + o tipo de gráfico:</p>
 
 <table class = 'rmdtable'>
-<col width="19.444444%" />
-<col width="37.500000%" />
-<col width="19.444444%" />
-<col width="23.611111%" />
+<col width="22.222222%" />
+<col width="33.333333%" />
+<col width="22.222222%" />
+<col width="22.222222%" />
 <tr class="header">
 <th align="center">Tipo de gráfico</th>
 <th align="left">Descrição</th>
@@ -3432,10 +3400,10 @@ aggregate(x,FUN,...)
 </article></slide><slide class=""><hgroup><h2>Estrutura básica do ggplot - Função geom_…()</h2></hgroup><article  id="estrutura-básica-do-ggplot---função-geom_-1" class="smaller ">
 
 <table class = 'rmdtable'>
-<col width="16.438356%" />
-<col width="50.684932%" />
-<col width="16.438356%" />
-<col width="16.438356%" />
+<col width="19.178082%" />
+<col width="42.465753%" />
+<col width="19.178082%" />
+<col width="19.178082%" />
 <tr class="header">
 <th align="center">Tipo de gráfico</th>
 <th align="left">Descrição</th>

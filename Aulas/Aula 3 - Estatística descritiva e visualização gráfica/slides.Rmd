@@ -43,7 +43,7 @@ $$
 library(ExpDes.pt) # carregando o pacote com dados de exemplo (ex4)
 dados <- ex4 # armazenando ex4 em "dados"
 dados$revol <- as.factor(ex4$revol) # transformando a variável revol em fator
-summary(dados[1:7]) # resumo das colunas 1 a 7
+summary(dados[1:6]) # resumo das colunas 1 a 6
 ```
 
 ## Medidas de posição
@@ -54,7 +54,21 @@ $$
 
 -   **x** deve ser escrito em forma de função, ou seja, se você quer calcular al
 
+média
+
+mediana
+
+max
+
+minimo
+
 ## Medidas de dispersão
+
+variância
+
+Desvio padrão
+
+CV (%)
 
 # Visualização de dados
 
@@ -104,27 +118,26 @@ A construção de um gráfico em camadas é um dos grandes responsáveis pela po
 
 ## Estrutura básica do ggplot - Função aes()
 
-Quem vai no eixo X e no Y? Devo separar por níveis? Essas questões que a função **aes()** responde.
+Quem vai no eixo X e no Y? Devo separar por níveis? Essas questões a função **aes()** responde:
 
-Principais argumentos da função aes()
+$$
+aes(x,\;y,\;color,\;fill,\; size,\;group,...)
+$$
 
-| Col1  | Col2                           | Col3 |
-|-------|--------------------------------|------|
-| x     | variável que irá no eixo x e y |      |
-| y     | variável que irá no eixo y     |      |
-| fill  | Preencher com cores            |      |
-| color | Colorir                        |      |
-| group |                                |      |
-|       |                                |      |
-|       |                                |      |
-|       |                                |      |
+-   **x** e **y** são as variáveis que vão nos eixos.
+
+-   **fill** e **color** são utilizado para atribuir uma cor ou preenchimento para cada categoria da variável que você especificou. Se for uma variável quantitativa, será criada uma escala de cor. *Fill* é para gráficos que possuam "espaço interno" preencher, como gráfico de colunas ou boxplot, já em pontos e linha usá-se *color*.
+
+-   **size** é utilizado para atribuir uma escala de tamanho conforme a variável que você específicou.
+
+-   **group** é utilizado para quando você não quer necessáriamente trocar a aparência do seu gráfico conforme uma variável, apenas sinaliziar que há grupos diferentes. Isso é comum quando se quer adicionar linhas múltiplas linhas de regressão.
 
 ## Estrutura básica do ggplot - Função geom\_...()
 
 O tipo de gráfico depende da categoria da suas variáveis e o tipo de informação que você busca. O ggplot possui muitos tipos de gráficos e o nome da função geralmente é **geom\_** + o tipo de gráfico:
 
 | Tipo de gráfico | Descrição                                                              |          Função          | Exemplo                                      |
-|:------------:|---------------------------|:------------:|-----------------|
+|:--------------:|------------------------|:--------------:|----------------|
 |   Histograma    | Usado em apenas uma variável para visualizar sua distribuição.         | \$geom\\\_histogram() \$ | ![](images/g_histograma.png){width="80"}     |
 |      Linha      | Acompanhar a mudança de uma variável através do tempo ou entre grupos. |      $geom\_line()$      | ![](images/g_linha.png){width="80"}          |
 |    Dispersão    | Identificar a relação entre duas variáveis quantitativas.              |      $geom\_point$       | ![](images/g_dispers%C3%A3o.png){width="80"} |
@@ -132,7 +145,7 @@ O tipo de gráfico depende da categoria da suas variáveis e o tipo de informaç
 ## Estrutura básica do ggplot - Função geom\_...()
 
 | Tipo de gráfico | Descrição                                                                                                                      |      Função       | Exemplo                               |
-|:----------:|-------------------------------------|:----------:|------------|
+|:------------:|-------------------------------|:------------:|--------------|
 |   *Box-plot*    | Usado para visualizar a distribuição de uma variável em diferentes categorias.                                                 | $geom\_boxplot()$ | ![](images/g_boxplot.png){width="80"} |
 |     Colunas     |                                                                                                                                |   $geom\_col()$   | ![](images/g_barras.png){width="80"}  |
 |      Calor      | Usado para três variáveis: intensidade de uma variável conforme a combinação das outras duas. Comum em gráficos de correlação. |  $geom\_tile()$   | ![](images/g_calor.png){width="94"}   |
