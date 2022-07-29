@@ -1,6 +1,6 @@
 ---
 title: "Estatistica experimental"
-author: "Emily Araujo e Thomas Bruno Michelon"
+author: "Emily Araujo"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   ioslides_presentation:
@@ -72,23 +72,23 @@ Originalmente foi pensada para publicar textos na internet de forma mais prátic
 
 ## Listas não ordenadas
 
-abacate, primeiro item na lista
+-   abacate, primeiro item na lista
 
-damasco, terceiro item na lista
+-   damasco, terceiro item na lista
 
-banana, segundo item na lista
+-   banana, segundo item na lista
 
-coco, quarto item na lista
+-   coco, quarto item na lista
 
 ## Listas ordenadas
 
-abacate
+1.  abacate
 
-banana
+2.  banana
 
-coco
+3.  coco
 
-damasco
+4.  damasco
 
 ## Criar Slides
 
@@ -236,7 +236,10 @@ E aperte ok!
 -   Para mostrar apenas o código usado, use eval=FALSE. '''{r, eval=FALSE}\
 -   Para rodar o Código sem mostrar a entrada ou saída, use include=FALSE. '''{r, include=FALSE}
 
-```{r, echo=TRUE} acaro_morango <- read.table("data/acaro.csv", header=T,  sep=";") head(acaro_morango) names(acaro_morango)}
+```{r, echo=TRUE}
+acaro_morango <- read.table("data/acaro.csv", header=T,  sep=";")
+head(acaro_morango)
+names(acaro_morango)
 ```
 
 ## Podemos adicionar gráficos!

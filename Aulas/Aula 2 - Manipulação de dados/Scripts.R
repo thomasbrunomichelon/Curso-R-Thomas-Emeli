@@ -1,56 +1,70 @@
-# 1. Estrutura de dados no R (s?o as formas que podemos armazenar informa??es no R, informa??es que podem ser dos nosso dados ou geradas a partir do uso de fun??es e modelos)
-# Vetores (contem um uma linha com elementos primitivos (interger, numeric, logica, character, complex))
-Exemplo1_vetor <- 1:20
-Exemplo2_vetor <- c("a", "b", "c")
+### R base ####
+# Selecionar
+dados <- data.frame(a=c(3,6,7,2),b=c(1,1,2,2),c=c("X", "Y", "Z", "W")) # data frame de exemplo
+dados # mostrar os dados
+dados$a # coluna "a"
+dados[,1] # primeira coluna
+dados[,-1] # tudo menos a primeira coluna
+dados[,c(1,2)] # primeira e segunda coluna
+dados[1,1] # primeira linha, primeira coluna
+dados$a[1] # coluna "A", primeiro elemento
 
-# Matrizes
+# Filtrar
+dados[dados$b=="1",] # todas as linhas referentes ao nível "1" da coluna b
+dados[dados$b=="1",1] # linhas da primeira coluna referentes ao nível 1 da coluna b
+dados$a[dados$b=="1"] # mesmo resultado anterior, porém acessando diretamente da primeira coluna
+dados$a[!dados$b =="1"] # linhas da coluna não pertencentes ao nível "1" da coluna b
+dados[dados$a > 5 & dados$c == "Z",] # todas as linhas em que a coluna a for maior que 5 e a c igual a "z"
+# Subset
+subset(dados, a>5 & c=="Z")
 
-# Data frame
-data(Orange)
+#Substituir
+dados # mostrar os dados
+dados[1,1] <- 6 # alterando a primeira linha da primeira coluna
+dados[2] <- c("lavoura", "lavoura", "floresta", "floresta")  # alterando toda a segunda coluna
+dados # mostrar os dados
 
-# Listas
+# Criar
+dados # mostrar os dados
+dados$d <- c(1,2,3,4) # criar nova coluna
+dados$log_A <- log(dados$a) # criar nova coluna com dados transformados (log) da primeira coluna
+dados # mostrar os dados
 
+# Renomear
+names(dados) # mostrar nome dos dados
+names(dados)[2] <- "ambiente" # alterar o segundo
+names(dados) # mostrar o nome dos dados
 
-# 2. Manipula??o de dados ####
-# 2.1 Manipula??o de dados usando o R base
-# Carregando os dados
-data(Orange)
+# Alterar classe
+class(dados$ambiente) # mostrar a classe da coluna "ambiente"
+dados$ambiente <- as.factor(dados$ambiente) # alterar a classe e atribuir a coluna "ambiente"
+class(dados$ambiente) # mostrar a classe da coluna "ambiente"
 
-# Acessando os dados
-# "$" ? usado para acessar uma coluna de dados (ou seja, um vetor dentro do data.frame)
-Orange$Tree
+#### dplyr ####
+# Selecionar
+dados <- data.frame(a=c(3,6,7,2),b=c(1,1,2,2),c=c("X", "Y", "Z", "W")) # data frame
+select(dados,a)
+select(dados,-a)
+select(dados,a,b)
 
-# "[" ? usado para acessar varios elementos de um data.frame e pode usar de acordo com a posi??o na linha e coluna
-Orange[1:5,] # antes da v?rgula ? linha depois ? coluna. "V? no data.frame orange e me da linha 1 a linha 5 e com todas as colunas"
-Orange[1] # primeira coluna
+# Filtrar
+filter(dados, b =="1")  # todas as linhas referentes ao nível "1" da coluna b
+select(filter(dados, b =="1"), a) # linhas da primeira coluna referentes ao nível 1 da coluna b
+select(filter(dados, b !="1"),a) # linhas da coluna a não pertencentes ao nível "1" da coluna b
+filter(dados, a>5 & c=="Z") # todas as linhas em que a coluna a for maior que 5 e a c igual a "z"
 
-fix(Orange)
+# Substituir
+dados <- mutate(dados, b=replace(b, b==1, "lavoura"))
+dados <- mutate(dados, b=replace(b, b==2, "floresta"))
 
-# Filtrando dados
-# "==" significa exatamente
-Orange[Orange$Tree==3,]
+# Criar
+dados <- mutate(dados, d=c(1,2,3,4)) # criar nova coluna
+dados <- mutate(dados, log_A=log(a)) # criar nova coluna com dados transformados (log) da primeira coluna
+dados
 
-# "<", "<=" menor ou menor e igual
-Orange[Orange$circumference>=100,]
+# Renomear
+dados <- rename(dados, "ambiente"=b)
 
-# ">", ">=" maior ou maior ou igual
-Orange[Orange$circumference<=100,]
+# Alterar classe
+dados <- mutate(dados, ambiente=as.factor(ambiente))
 
-# "!=" Diferente de
-Orange[Orange$Tree!=2,]
-
-# "&" Significa "e", ? usado para ligar duas condi??es em que ambas devem ser satisfeitas
-Orange[Orange$Tree == 2 & Orange$age >= 30,]
-
-# "|" Significa "ou", usado para ligar duas condi??es em que pelo menos uma deva ser satisfeita
-Orange[Orange$Tree == 2 | Orange$Tree == 3,]
-
-# "!" Significa "n?o" e ? usado para especificar algo que deva ser omitido
-Orange[!Orange$Tree == 2,]
-
-# Pacote dyplr: tem fun??es que fazem as opera??es vistas anteriormente
-subset(Orange, circumference > 200, select=c(age, Tree))
-
-https://data-flair.training/blogs/data-manipulation-in-r/
-
-|>
