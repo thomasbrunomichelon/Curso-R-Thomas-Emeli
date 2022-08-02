@@ -355,7 +355,7 @@ $*$ **Cuidado!** Você alterará seus dados "manualmente" e não por meio de có
 Pacote dplyr foi criado para manipulação de dados e, assim, possui várias funções para essa finalidade:
 
 | Função         | sintaxe                                                               |
-|---------------------|---------------------------------------------------|
+|----------------|-----------------------------------------------------------------------|
 | Selecionar     | $select(objeto, variável)$                                            |
 | Filtrar        | $filter(objeto, expressão)$                                           |
 | Substituir     | $mutate(objeto, variável = replace(variável, posição, novo\; valor))$ |
