@@ -1,15 +1,29 @@
 ---
 title: "Distribuição de probabilidades"
-author: "Emily Silva Araujo e Thomas Bruno Michelon"
-date: '2022-06-09'
-output: ioslides_presentation
+author: "Emily Silva Araujo"
+output:
+  ioslides_presentation:
+    css: ../../style.css
+    logo: ../../curso-agro-r-logo.png
+    smaller: yes
+    widescreen: yes
+  slidy_presentation: default
+subtitle: Curso R para agronomia
 ---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(paged.print=FALSE)
+knitr::opts_chunk$set(echo=TRUE)
+knitr::opts_chunk$set(error=FALSE)
+knitr::opts_chunk$set(message=FALSE)
+knitr::opts_chunk$set(warning=FALSE)
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
+```
 
 ## Variáveis aleatórias (v.a)
 
 ### **Introdução**
 
--   **Variável aleatória unidimensional**, é toda função que atribui um único número real, a cada sucesso elemental do espaço amostral.
+-   **Variável aleatória unidimensional** é toda função que atribui um único número real, a cada sucesso elemental do espaço amostral.
 
 -   Aos possíveis valores de uma v.a se associam probabilidades de ocorrência.
 
@@ -24,8 +38,7 @@ output: ioslides_presentation
 ## Distribuições de probabilidade
 
 -   Uma distribuição de probabilidade descreve o comportamento aleatório de um fenômeno dependente do acaso.
-
-\- As distribuições de probabilidade podem ser **discretas** ou **contínuas**.
+-   As distribuições de probabilidade podem ser **discretas** ou **contínuas**.
 
 ## Função de massa de probabilidade
 
@@ -35,7 +48,7 @@ output: ioslides_presentation
 
 ## Função de distribuição de uma variável aleatória
 
--   Esta função associa a cada nú mero real a probabilidade de que a variável tome valores menores ou iguais a este número
+-   Esta função associa a cada número real a probabilidade de que a variável tome valores menores ou iguais a este número.
 
 ## Funções básicas de R no cálculo de distribuições de probabilidades
 
@@ -43,7 +56,7 @@ Existem quatro funções básicas de R que permitem determinar, respectivamente:
 
 -   os valores da função de distribuição;\
 -   a função de massa ou densidade (segundo se trate de uma distribuição discreta ou contínua);\
--   os cuantiles; \
+-   os quantis; \
 -   números aleatórios de determinados modelos probabilísticos.
 
 ## Funções básicas de R no cálculo de distribuições de probabilidades
@@ -54,7 +67,7 @@ Em concreto se trata das funções:
 
 -   d*distribu* (x, par) com a qual calculamos o valor da função de massa ou densidade da distribuição *distribu* no ponto x.
 
--   q*distribu* (x, par) com a qual podemos calcular o p-cuantil da distribuição *distribu*. Isto é, (1/F)(p), sendo F a função de distribuição de *distribu*.
+-   q*distribu* (x, par) com a qual podemos calcular o p-quantil da distribuição *distribu*. Isto é, (1/F)(p), sendo F a função de distribuição de *distribu*.
 
 -   r*distribu* (n, par) mediante a que podemos conseguir n valores obtidos ao acaso segundo o modelo *distribu*.
 
@@ -69,13 +82,13 @@ pnorm (1.5, 1,2)
 
 ```
 
-## **Modelos unidimensionais continuos**
+## **Modelos unidimensionais contínuos**
 
 ### **Distribuição normal**
 
 -   Compreender o tipo de distribuição dos dados é importante em estatística paramétrica.
 
-    ![](figuras/grafico%20normal%201.png){width="530"}
+    ![](images/grafico%20normal%201.png){width="373"}
 
 ## **Distribuição normal**
 
@@ -89,17 +102,13 @@ pnorm (1.5, 1,2)
 
 Para conhecer as caracteristicas de distribuição normal em R:
 
-\
-- pnorm (x, a, b) \# função de distribuição no ponto x da normal (a, b)
+-   pnorm (x, a, b): função de distribuição no ponto $x$ da normal (a, b).
 
- \
-- dnorm (x, a, b) \# função de densidade no ponto x da normal (a, b)
+-   dnorm (x, a, b): função de densidade no ponto $x$ da normal (a, b).
 
- \
-- qnorm (p, a, b) \# cuantil de ordem p da normal (a, b) 
+-   qnorm (p, a, b): quantil de ordem $p$ da normal (a, b).
 
-\
-- rnorm (n, a, b) \# amostra aleatoria de tamanho n da normal (a, b)
+-   rnorm (n, a, b): amostra aleatória de tamanho $n$ da normal (a, b).
 
 ## **Distribuição normal**
 
@@ -119,7 +128,7 @@ A área embaixo da totalidade da curva é 1; todos tem uma altura entre menos in
 
 a)  A probabilidade de que uma pessoa, selecionada ao acaso deste grupo, seja menor que 160 cm.
 
-    ![](figuras/graficos%20normal1.png){width="614"}
+    ![](images/graficos%20normal1.png){width="534"}
 
 ------------------------------------------------------------------------
 
@@ -146,7 +155,7 @@ Resposta da primeira pergunta: a probabilidade de que uma pessoa, selecionada ao
 
 Qual a probabilidade de selecionar uma pessoa e encontrar que ela é maior de 185 cm?
 
-![](figuras/grafico%20normal3.png){width="413"}
+![](images/grafico%20normal3.png){width="377"}
 
 ```{r, echo=TRUE}
 z= (185 - 170)/8
@@ -180,7 +189,7 @@ Resposta: 3 %.
 
 Por fim, desejamos saber qual é a probabilidade de selecionar uma pessoa entre 165 cm e 180 cm.
 
-![](figuras/grafico%20normal4.png){width="468"}
+![](images/grafico%20normal4.png){width="534"}
 
 ------------------------------------------------------------------------
 
@@ -205,7 +214,7 @@ Portanto, descobrimos que existe a chance de 63 % de selecionar uma pessoa media
 
 ## **O teorema do limite central**
 
-Se você toma amostras repetidas de uma população com variancia finita e calcula suas médias, então as médias serão normalmente distribuidas.
+Se você toma amostras repetidas de uma população com variância finita e calcula suas médias, então as médias serão normalmente distribuidas.
 
 ## **Gamma**
 
@@ -227,22 +236,25 @@ Se você toma amostras repetidas de uma população com variancia finita e calcu
 
 -   O comando a utilizar em R é gamma.
 
--   pgamma (x, a, b) \# função de distribuição em x da gamma (a,b).\
+-   pgamma (x, a, b): função de distribuição em $x$ da gamma (a,b).\
 
--   dgamma (x, a, b) \# função de densidade em x da gamma (a, b).
+-   dgamma (x, a, b): função de densidade em $x$ da gamma (a, b).
 
--   qgamma (p, a, b) \# cuantil de ordem p da gamma (a, b)\
+-   qgamma (p, a, b): quantil de ordem $p$ da gamma (a, b)\
 
--   rgamma (n, a, b) \# amostra aleatória de tamanho n da gamma (a, b)
+-   rgamma (n, a, b): amostra aleatória de tamanho $n$ da gamma (a, b)
 
 ## **Modelos unidimensionais associados a distribuições normais**
 
-### **Distribuição X² de Pearson**
+### **Distribuição** $\chi^2$ **de Pearson**
 
-pchisq (x, n) \# função de distribuição em x da Chi-quadrado com n grados de liberdade.\
-dchisq (x, n) \# função de densidade em x da Chi-quadrado com n graus de liberdade.\
-qchisq (p, n) \# cuantil de ordem p da Chi-quadrado com n grados de liberdade.\
-rchisq (m, n) \# amostra aleatória de tamanho m da Chi-quadrado com n graus de liberdade.
+-   pchisq (x, n): função de distribuição em $x$ da Chi-quadrado com $n$ grados de liberdade.
+
+-   dchisq (x, n): função de densidade em $x$ da Chi-quadrado com $n$ graus de liberdade.
+
+-   qchisq (p, n): quantil de ordem $p$ da Chi-quadrado com $n$ grados de liberdade.
+
+-   rchisq (m, n): amostra aleatória de tamanho $m$ da Chi-quadrado com $n$ graus de liberdade.
 
 ------------------------------------------------------------------------
 
@@ -255,14 +267,14 @@ plot(x,dchisq(x,4),type="l",col=1)
 
 ```
 
-## **Distribuição X² de Pearson**
+## **Distribuição** $\chi^2$ **de Pearson**
 
 ```{r, echo=TRUE}
 x<-seq(0,40,len=100)
 plot(x,dchisq(x,9),type="l",col=2)
 ```
 
-## **Distribuição X² de Pearson**
+## **Distribuição** $\chi^2$ **de Pearson**
 
 ```{r, eCho=TRUE}
 x<-seq(0,40,len=100)
@@ -281,14 +293,17 @@ A distribuição t de Student tem propriedades parecidas a N(0,1):
 
 O comando a utilizar em R é t.
 
-pt (x,n) \# função de distribuição em x da t-Student com n graus de liberdade\
-dt (x, n) \# função de densidade em x da t-Student com n graus de liberdade\
-qt (x, n) \# cuantil de ordem p da t-Student com n graus de liberdade\
-rt (x, n) \# amostra aleatória de tamanho m a t-Student com n graus de liberdade
+-   pt (x,n): função de distribuição em $x$ da t-Student com $n$ graus de liberdade.
+
+-   dt (x, n): função de densidade em $x$ da t-Student com $n$ graus de liberdade.
+
+-   qt (x, n): quantil de ordem $p$ da t-Student com $n$ graus de liberdade.
+
+-   rt (x, n): amostra aleatória de tamanho $m$ a t-Student com n graus de liberdade.
 
 ## Exemplo
 
-A distribuição t de Student se aproxima em uma N(0,1) quando n aumenta.\
+A distribuição t de Student se aproxima em uma N(0,1) quando $n$ aumenta.\
 
 ```{r, echo=FALSE}
 par(mfrow=c(2,2))
@@ -305,7 +320,7 @@ lines(x,dnorm(x),col=3,lty=2)
 
 ------------------------------------------------------------------------
 
-A figura gerada estava representando a densidade da t de Student com n = 5, 8, 15 e 30 graus de liberdade e sobrepondo em cada caso, a densidade da normal estándar.
+A figura gerada estava representando a densidade da t de Student com n = 5, 8, 15 e 30 graus de liberdade e sobrepondo em cada caso, a densidade da normal padrão.
 
 ## **Distribuição F de Snedecor**
 
@@ -327,10 +342,10 @@ A figura gerada estava representando a densidade da t de Student com n = 5, 8, 1
 
 O comando em R é **f**. Assim:
 
--   pf (x, n1, n2) \# função de distribuição em x da F (n1, n2)\
--   df (x, n1, n2) \# função de densidade em x da F (n1, n2)\
--   qf (p, n1, n2) \# cuantil de ordem p da F (n1, n2)\
--   rf (n, n1, n2) \# amostra aleatória de tamanho n da F (n1, n2)
+-   pf (x, n1, n2) \# função de distribuição em $x$ da F (n1, n2)\
+-   df (x, n1, n2) \# função de densidade em $x$ da F (n1, n2)\
+-   qf (p, n1, n2) \# quantil de ordem $p$ da F (n1, n2)\
+-   rf (n, n1, n2) \# amostra aleatória de tamanho $n$ da F (n1, n2)
 
 ## Modelos unidimensionais discretos
 
@@ -360,17 +375,13 @@ O número de eventos (X) em n ensaios segue uma distribuição binomial, se fore
 
 O comando a utilizar no R é *binom*.
 
-\
-- pbinom (x, n, p) \# valor da função de distribuição no x da binomial (n, p)
+-   pbinom (x, n, p): valor da função de distribuição no $x$ da binomial (n, p).
 
-\
-- dbinom (x, n, p) \# valor da função de massa no x da binomial (n, p)
+-   dbinom (x, n, p): valor da função de massa no $x$ da binomial (n, p).
 
-\
-- qbinom (q, n, p) \# cuantil de ordem q da binomial (n, p)
+-   qbinom (q, n, p): quantil de ordem $q$ da binomial (n, p).
 
-\
-- rbinom (m, n, p) \# muestra aleatória de tamanho m da binomial (n, p)
+-   rbinom (m, n, p): amostra aleatória de tamanho $m$ da binomial (n, p)
 
 ## Exemplos
 
@@ -437,17 +448,13 @@ Uma variável segue uma distribuição de Poisson se as seguintes condições fo
 
 O comando a utilizar em R é pois.
 
-\
-- ppois (x, a) \# valor da função de distribuição de x de Poisson (a)
+-   ppois (x, a): valor da função de distribuição de $x$ de Poisson (a).
 
-\
-- dpois (x, a) \# valor da função de massa de x da Poisson (a)
+-   dpois (x, a): valor da função de massa de $x$ da Poisson (a).
 
-\
-- qpois (x, a) \# cuantil de ordem p da Poisson (a)
+-   qpois (x, a): quantil de ordem $p$ da Poisson (a).
 
-\
-- rpois (n, a) \# amostra aleatória de tamanho n da Poisson (a)
+-   rpois (n, a): amostra aleatória de tamanho $n$ da Poisson (a).
 
 ## O que é taxa de ocorrência?
 
@@ -490,13 +497,13 @@ Resposta: a probabilidade de P (X = 0) é de 0.8187
 
 O comando a utilizar em R é n*binom*.
 
--   pnbinom (x, n, p) \# função de distribuição de x da binomial negativa (n, p)
+-   pnbinom (x, n, p): função de distribuição de $x$ da binomial negativa (n, p).
 
--   dnbinom (x, n, p) \# função de massa em x da binomial negativa (n, p)
+-   dnbinom (x, n, p): função de massa em $x$ da binomial negativa (n, p).
 
--   qnbinom (q, n, p) \# cuantil de ordem q da binomial negativa (n, p)
+-   qnbinom (q, n, p): quantil de ordem $q$ da binomial negativa (n, p).
 
--   rnbinom (n, n, p) \# amostra aleatória de tamanho n da binomial negativa (n, p).
+-   rnbinom (n, n, p): amostra aleatória de tamanho $n$ da binomial negativa (n, p).
 
 ## Exemplo 1 de Binomial Negativa
 
@@ -531,10 +538,15 @@ Calcular P (família tenha ao menos 4 filhos)
 ```
 
 ## Referências
-- Freddy Hernández; Olga Usuga.2021.**Manual de R**. <https://fhernanb.github.io/Manual-de-R/index.html>
 
--   Suporte ao minitab [minitab 18] (<https://support.minitab.com/pt-br/minitab/18/help-and-how-to/probability-distributions-and-random-data/supporting-topics/distributions/poisson-distribution/>)
+-   Freddy Hernández; Olga Usuga.2021. **Manual de R**.
 
--   Crawley, M.J. The R book, 2007, Wiley.
+    -   <https://fhernanb.github.io/Manual-de-R/index.html>
 
--   Pérez, A.G. Estadística aplicada con R, 2012. Universidad Nacional de Educación a distancia. Editorial Aranzadi, S.A.
+-   Suporte ao minitab [minitab 18]
+
+    -   (<https://support.minitab.com/pt-br/minitab/18/help-and-how-to/probability-distributions-and-random-data/supporting-topics/distributions/poisson-distribution/>)
+
+-   Crawley, M.J. **The R book**. Wiley, 2007.
+
+-   Pérez, A.G. **Estadística aplicada con R**. Universidad Nacional de Educación a distancia. Editorial Aranzadi, S.A. 2012.

@@ -472,7 +472,7 @@ $$emmeans(object, specs, type, … )$$
 -   *specs* é o argumento responsável pelo desdobramento das médias:
 
 | Número de fatores                       | simbolo | exemplo                               |
-|-----------------------------|---------------|----------------------------|
+|-----------------------------------------|---------|---------------------------------------|
 | Um fator                                |         | specs = \~ tratamento                 |
 | Dois fatores: fator 1 dentro do fator 2 | $$|$$   | specs = \~ tratamento1 \| tratamento2 |
 | Dois fatores: todas as combinações      | $$*$$   | specs = \~ tratamento1 \* tratamento2 |
@@ -530,7 +530,7 @@ cld(medias, Letters = LETTERS, reversed = TRUE) # mostrando as médias com as "l
 O pacote **ExpDes.pt** engloba diversos delinementos e realiza os procedimentos automaticamente: ANOVA, testes de pressupostos e comparação de médias. Basta usar a função conforme o seu delineamento:
 
 | Delineamento                                                     |                Função                |
-|---------------------------------------------|:-------------------------:|
+|------------------------------------------------------------------|:------------------------------------:|
 | Inteiramente casualizado                                         |        $dic(trat, resp,...)$         |
 | Fatorial duplo inteiramente casualizado                          |  $fat2.dic(fator1, fator2, resp,…)$  |
 | Fatorial duplo inteiramente casualizado com tratamento adicional | $fat2.ad.dic(fator1,fator2,repet,…)$ |
@@ -544,7 +544,7 @@ $*$ **Nota**: se o pacote faz todas as etapas, o porque ensinar por meio de fun�
 Cada função possui diversos argumentos; porém, alguns são básicos e se repetem entre as funções:
 
 | Argumento   | O que é?                                                                                                   |
-|--------------|----------------------------------------------------------|
+|-------------|------------------------------------------------------------------------------------------------------------|
 | trat        | Variável tratamento.                                                                                       |
 | resp        | Variável resposta.                                                                                         |
 | quali       | Se os tratamentos são (TRUE) ou não (FALSE) qualitativo.                                                   |
