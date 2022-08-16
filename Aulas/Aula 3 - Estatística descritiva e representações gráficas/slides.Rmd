@@ -1,7 +1,6 @@
 ---
 title: "Estatística descritiva e representações gráficas"
 author: "Thomas Bruno Michelon"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   ioslides_presentation:
     css: ../../style.css
@@ -37,9 +36,7 @@ Geralmente a coluna de dados da nossa variável resposta é longa e abstrata. Lo
 
 ## Média
 
-A medida de posicionamento possivelmente mais comum. É a soma das observações dividida pelo número de observações.
-
-A função que realiza a média no R é:
+A medida de posicionamento possivelmente mais comum. É a soma das observações dividida pelo número de observações. A função que realiza a média no R é:
 
 $$
 mean(x,...)
@@ -100,16 +97,15 @@ sd(dados) # desvio padrão
 
 ## Coeficiente de variação
 
-Uma forma de comparar experimentos com desvios e médias diferentes é dividindo um pelo outro. Assim, relativizamos essas duas medidas e teremos apenas uma. Essa é a ideia do Coeficiente de Variação (CV).
+Como eu sei se o desvio padrão é grande ou não, já que possuo variáveis com medidas diferentes?
 
-Para experimentos no campo da agronomia, a precisão experiemental pode ser classificada conforme o CV (%) (Gomes, 1987):
+Uma forma de comparar variáveis com desvios e médias diferentes é dividindo um pelo outro. Assim, relativizamos essas duas medidas e teremos apenas uma. Essa é a ideia do Coeficiente de Variação (CV).
 
-| Coeficiente de Variação - CV (%) | Precisão experimental |
-|:--------------------------------:|:---------------------:|
-|            CV \< 10%             |         Alta          |
-|         10 \< CV \< 20%          |         Média         |
-|         20 \< CV \< 30%          |         Baixa         |
-|            CV \> 30%             |      Muito baixa      |
+| Variável                 | Desvio Padrão | Média  | CV(%) |
+|--------------------------|:-------------:|:------:|:-----:|
+| Comprimento de raiz (cm) |      3,4      |  13,5  | 25,50 |
+| Massa de 100 grãos (g)   |     50,8      | 230,50 | 22,04 |
+| Volume de água ($m^3$)   |     0.08      |  0.3   | 26,67 |
 
 ## Coeficiente de variação
 
@@ -410,7 +406,7 @@ $$
 ## Estrutura básica do ggplot - função geom\_...()
 
 | Tipo de gráfico | Descrição                                                 |       Função        | Exemplo                                      |
-|:--------------:|-----------------------|:--------------:|-----------------|
+|:------------:|-------------------------|:------------:|-------------------|
 |   Histograma    | Visualizar a distribuição de uma variável quantitativa.   | $geom\_histogram()$ | ![](images/g_histograma.png){width="80"}     |
 |      Linha      | Mudança de uma variável através do tempo ou entre grupos. |   $geom\_line()$    | ![](images/g_linha.png){width="80"}          |
 |    Dispersão    | Relação entre duas variáveis quantitativas.               |    $geom\_point$    | ![](images/g_dispers%C3%A3o.png){width="80"} |
@@ -418,7 +414,7 @@ $$
 ## Estrutura básica do ggplot - função geom\_...()
 
 | Tipo de gráfico | Descrição                                                                                           |      Função       | Exemplo                               |
-|:-------------:|-----------------------------|:-------------:|---------------|
+|:-----------:|----------------------------------|:-----------:|-------------|
 |   *Box-plot*    | Distribuição de uma variável sozinha ou em diferentes níveis de outra variável.                     | $geom\_boxplot()$ | ![](images/g_boxplot.png){width="80"} |
 |     Colunas     | Comparar valores individuais de diferentes categorias.                                              |   $geom\_col()$   | ![](images/g_barras.png){width="80"}  |
 |      Calor      | Intensidade de uma variável conforme a combinação das outras duas. Comum em gráficos de correlação. |  $geom\_tile()$   | ![](images/g_calor.png){width="94"}   |
@@ -777,7 +773,9 @@ esquisser(dados) # abrir painel interativo do esquisse
 
 ## Referências
 
-Gomes, F. P. Curso de estatística experimental (12 ed.). ESALQ, 1987, 467p.
+-   Bussab, W. O.; Morettin, P. A. **Estatística Básica (9 ed.)**. Saraiva, 2017, p. 553.
+
+-   Crawley, M.J. **The R Book**. Willey, 2013, 975p.
 
 ## Códigos
 

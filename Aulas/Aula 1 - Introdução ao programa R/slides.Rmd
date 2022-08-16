@@ -1,7 +1,6 @@
 ---
 title: "Introdução ao R"
 author: "Thomas Bruno Michelon"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   ioslides_presentation:
     css: ../../style.css
@@ -89,7 +88,7 @@ Se você quer apenas usar o R rapidamente, basta você abrir o aquivo do RStudio
 
 5.  Começar sua análise.
 
-![](images/workflow.png){width="929"}
+![](images/workflow.png){width="697"}
 
 ## Diretório de trabalho
 
@@ -97,7 +96,13 @@ Diretório de trabalho é a pasta onde o R busca os dados que você quer anális
 
 ![](images/Diretorio-1.png){width="237"}
 
-O "endereço" do diretório padrão é sua pasta "documentos", alguma coisa como: "C:/Users/SeuNome/Documentos", esse é seu **diretório absoluto**.
+O "endereço" do diretório padrão é sua pasta "documentos", alguma coisa como:
+
+$$
+C:/Users/SeuNome/Documentos
+$$
+
+Esse é seu **diretório absoluto**.
 
 ## Diretório de trabalho
 
@@ -133,7 +138,7 @@ Diretório absoluto não é a melhor opção, pois ele está sempre ligado ao **
 
 Pronto! Seu novo diretório deve se parecer com algo do tipo:
 
-![](images/Diretorio-5.png){width="359"}
+![](images/Diretorio-5.png){width="474"}
 
 Basta você abrir seu arquivo **.R** e começar sua análise.
 
@@ -153,7 +158,7 @@ Dessa forma, muitos usuários costumam, ao abrir o R, limpar os objetos do ambie
 
 ## .RData e .Rhistory
 
-Para desativar o .RData e o .Rhistory, basta abrir o seu arquivo .Rproj, ir em **Tools\>Global Options** e desativar as opçoes:
+Para desativar o .RData e o .Rhistory, basta abrir o seu arquivo .Rproj, ir em **Tools\>Global Options** e desmarcar as opçoes:
 
 ![](images/desativar%20rdata%20e%20rhistory.png){width="433"}
 
@@ -199,7 +204,7 @@ No R, um vetor que possua **caracteres** ou seja **numérico** pode ser converti
 
 Transformar um vetor em um fator é muito importante para análise de dados, principalmente quanto temos um vetor numérico (ex., experimentos com diferentes doses), pois o R precisa entender que os dados são **categorias** e não uma **sequência de números**.
 
-## Exemplo no R - objetos e dados
+## Exemplos no R - objetos e dados
 
 Veja um exemplo de cada tipo de variável:
 
@@ -212,7 +217,7 @@ class(exemplo_caractere)
 
 $*$ Repare que para combinar cada dado em um vetor é necessário usar **c()**. Já para caracteres é sempre obrigatório utilizar **aspas**, caso contrário o R entenderá que é um objeto e não um caractere.
 
-## Exemplo no R - objetos e dados
+## Exemplos no R - objetos e dados
 
 ```{r}
 exemplo_lógico <- c(TRUE, FALSE, FALSE) # criando um vetor lógico
@@ -221,7 +226,7 @@ exemplo_fatores <- as.factor(exemplo_numerico) # transformando numérico em fato
 class(exemplo_fatores)
 ```
 
-## Exemplo no R - objetos e dados
+## Exemplos no R - objetos e dados
 
 Veja como fica no programa:
 
@@ -242,7 +247,7 @@ Repare que no lado campo direito, em "Values", em cada vetor, há o tipo de dado
 No R, com os objetos e dados podemos fazer diversas operações: **cálculos, operações lógicas, criar sequências, manipular dados, escrever funções,** entre outros. Para essas operações, existem algum símbolos básicos:
 
 | Tipo         | Operadores                                                                                          |
-|--------------|-----------------------------------------------------------------------------------------------------|
+|--------------|----------------------------------------------------------|
 | Aritiméticos | \+ (soma), - (subtração), \* (multiplicação), / (divisão), \^ (potência)                            |
 | Relacionais  | \> (maior), \< (menor), \>= (maior ou igual), == (igual), != (não igual)                            |
 | Lógicos      | ! (não), & (e), \| (ou)                                                                             |
@@ -252,13 +257,21 @@ No R, com os objetos e dados podemos fazer diversas operações: **cálculos, op
 | Extração     | \$, [, [[ (utilizados para acessar/extrair dados do seu objeto (vetor, data frame, matriz ou lista) |
 | Comentário   | \# (o que vier após esse simbolo é lido como texto)                                                 |
 
-## Operações e operadores
+## Operações e operadores - Fórmula
 
--   **Cuidado**, alguns símbolos podem mudar sua função quando dentro de uma **fórmula**. Por exemplo, o simbolo aritimético de multiplicação ($*$) em uma fórmula representa interação entre dois efeitos, já o que cria uma sequência ($:$), significa a soma dos efeitos simples mais a interação.
+**Cuidado**, alguns símbolos podem mudar sua função quando estão no formato **fórmula**.
 
--   Para acessar informações sobre algum operador, basta você utilizá-lo na função help. Por exemplo: **help("[")**.
+| Operadores | Significado                 | Exemplo            |
+|:----------:|-----------------------------|--------------------|
+|    $+$     | Adiciona efeitos            | y \~ a + b         |
+|    $:$     | Interação entre fatores     | y \~ a : b         |
+|    $*$     | Efeitos simples e interação | y \~ a + b + a : b |
 
-## Exemplo no R - operações e operadores
+O formato fórmula é muito comum tanto na elaboração de modelos quanto na manipulação de dados, pois indica que o elemento da esquerda está em função do elemento da direita.
+
+Para acessar informações sobre algum operador, basta você utilizá-lo na função help. Por exemplo: **help("[")**.
+
+## Exemplos no R - operações e operadores
 
 Veja o exemplo do uso de alguns operadores:
 
@@ -269,7 +282,7 @@ y <- x+10 # somar 10 a cada valor de "x" e atribuir a "y"
 y # mostrar y
 ```
 
-## Exemplo no R - operações e operadores
+## Exemplos no R - operações e operadores
 
 ```{r}
 x[1:3] # acessar ("[]") os valores nas posições 1, 2 e 3 (":") de "x"

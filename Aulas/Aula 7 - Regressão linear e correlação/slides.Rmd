@@ -1,0 +1,260 @@
+---
+title: "Regressão linear e correlação"
+author: "Thomas Bruno Michelon"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  ioslides_presentation:
+    css: ../../style.css
+    logo: ../../curso-agro-r-logo.png
+    smaller: yes
+    widescreen: yes
+  slidy_presentation: default
+subtitle: Curso R para agronomia
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(paged.print=FALSE)
+knitr::opts_chunk$set(echo=TRUE)
+knitr::opts_chunk$set(error=FALSE)
+knitr::opts_chunk$set(message=FALSE)
+knitr::opts_chunk$set(warning=FALSE)
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
+```
+
+# Regressão linear
+
+# Correlação
+
+## Associação entre variáveis
+
+Para sabermos se duas variáveis estão relacionadas, podemos medir o grau de associação entre elas. Porém, a forma de medir a associação entre duas variáveis, depende da classe delas:
+
+| Variável 1         | Variável 2 | Medir associação                  |
+|--------------------|------------|-----------------------------------|
+| Numérica           | Númerica   | Correlação de pearson ou spearman |
+| Categórica ordinal | numérica   | Correlação de spearman            |
+| Categórica         | Categórica | Teste do chi-quadrado             |
+| Categórica         | Numérica   | ANOVA                             |
+
+## Correlação de Pearson
+
+A **correlação de pearson (r)** mede a relação **linear** entre duas variáveis, ou seja, **x** e **y** formando uma linha reta. É uma medida de **correlação paramétrica**, pois depende da distribuição dos dados, os quais devem ser **normalmente distribuidos** e pode ser calculada por:
+
+$$
+r=\frac{1}{n}\sum(\frac{x_i-\bar{x}}{DP(X)})(\frac{y_i-\bar{y}}{DP(Y)})
+$$
+
+A correlação de Pearson não é nada mais que a média ($\frac{1}{n}\sum$) da variação conjunta de $x$ e $y$ (($x_i-\bar{x}$)($y_i-\bar{y}))$, dividida pelo desvio padrão ($DP$) para anular a diferença de escala entre as variáveis.
+
+A medida varia de -1 e 1 e indica:
+
+![](images/correlacao.png){width="653"}
+
+## Correlação de Pearson
+
+```{r echo=FALSE, out.width="70%"}
+par(mfrow=c(1,3))
+set.seed(3)
+x <- 1:20 +rnorm(20, 10,3)
+y <- 21:40+rnorm(20, 15,5)
+plot(x,y, main="Correlação posit. forte (r>0.5)")
+abline(lm(y~x))
+text(10,55,paste("r=",round(cor(x,y),2)))
+set.seed(4)
+x <- 20:1 +rnorm(20, 10,3)
+y <- 21:40+rnorm(20, 15,5)
+plot(x,y, main="Correlação negat. forte (r<-0.5)")
+abline(lm(y~x))
+text(14,55,paste("r=",round(cor(x,y),2)))
+set.seed(6)
+x <- 20:1 +rnorm(20, 10,3)
+y <- 50+rnorm(20, 15,5)
+plot(x,y, main="Sem correlação (r=0)")
+abline(lm(y~x))
+text(15,74,paste("r=",round(cor(x,y),2)))
+
+```
+
+## Correlação de Pearson - problemas
+
+```{r,echo=FALSE, out.width="70%"}
+par(mfrow=c(1,3))
+# outlier
+set.seed(2)
+x <- c(rnorm(25, 10,3),40)
+y <- c(rnorm(25, 10, 3),50)
+dados <- data.frame(x=x, y=y)
+plot(x,y, main="Outliers")
+abline(lm(y~x))
+
+# non linear
+set.seed(1)
+x <- seq(6,10,by=0.07)
+y <- (1/(1+exp(1)^-x*0.2))+rnorm(58, 0.1,0.00002)
+dados <- data.frame(x=x, y=y)
+plot(x,y, main="Relação não-linear")
+abline(lm(y~x))
+
+# non-normal
+set.seed(1)
+x <- 1:100+rnorm(100, 10,3)
+y <- x+rnorm(100, 10, x/5)
+dados <- data.frame(x=x, y=y)
+plot(x,y,main="Variância não homogênea")
+abline(lm(y~x))
+```
+
+## Correlação de Spearman
+
+Correlação de Spearman é uma **correlação baseada no ranqueamento**:
+
+![](images/spearman.png){width="528"}
+
+Por esse motivo, é capaz identificar de forma geral a tendência de aumento ou diminuição entre dados e **não apenas a sua relação linear**, como a correlação de pearson.
+
+## Correlação de Spearman
+
+A correlação de Spearman é uma correlação **não-paramétrica** e é indicada para:
+
+-   Dado não-normais;
+
+-   Que possuem relação não-linear entre variáveis;
+
+-   Dados com possíveis outliers;
+
+Além disso, pelo fato da correlação de Spearman ser calculada com base no ranqueamento dos dados, é possível utilizá-la em dados categóricos ordinais, ou seja, dados não numéricos, mas que possuem uma ordem entre eles: nível de infestação de uma doença, classes de qualidade, entre outros.
+
+## Correlação no R
+
+$$
+cor(x, y, method,...)
+$$
+
+-   **x** e **y** podem ser tanto um vetor com cada variável, quanto uma matriz ou objeto do tipo data frame.
+
+    -   Quando é fornecido uma matriz ou data frame, não é necessário especificar o **y** e o resultado será uma matriz de correlação entre todas as variáveis.
+
+-   **method** define qual correlação deverá ser calculada:
+
+    -   Pearson: **method="pearson"**
+
+    -   Spearman: **method="spearman"**
+
+## Exemplos no R - correlação
+
+```{r}
+library(ExpDes.pt)
+dados <- ex4
+cor(dados$k, dados$c, method = "pearson")
+cor(dados$k, dados$c, method = "spearman")
+```
+
+## Exemplos no R - correlação
+
+```{r}
+cor(dados[,c(4, 5, 6, 7,8)])
+```
+
+## Teste de correlação
+
+Para calcular se a correlação entre duas variáveis é significativa ou não, pode-se usar:
+
+$$
+cor.test(x, y, method,...)
+$$
+
+-   **x** e **y** são os dois vetores com os dados a serem correlacionados.
+
+-   **method** define qual correlação deverá ser calculada:
+
+    -   Pearson: **method="pearson"**
+
+    -   Spearman: **method="spearman"**
+
+## Exemplos no R - teste de correlação
+
+```{r}
+cor.test(dados$zn, dados$c, method = "spearman")
+```
+
+## Gráfico de correlação
+
+O pacote **ggcorrplot** possui a função com mesmo nome e é a extensão do ggplot2 responsável por criar o gráfico de correlação:
+
+```{r, eval=FALSE}
+install.package("ggcorrplot")
+```
+
+$$
+ggcorrplot(corr, lab, p.mat, type,...)
+$$
+
+-   **corr** é a matriz de correlação gerada pela função **cor()**.
+
+-   **lab** determina se deve (**=TRUE**) ou não (**=FALSE**) mostrar os valores da correlação.
+
+-   **p.mat** é o objeto com a matriz de p-valores de cada correlação criada com a função **cor_pmat()**.
+
+    -   Os p-valores não significativos (\>0.05), são marcados com um "X".
+
+-   **type** determina se deve mostrar apenas a parte superior (**="upper"**) ou inferior (**="lower"**) do gráfico.
+
+## Exemplos no R - gráfico de correlação
+
+```{r, out.width="70%"}
+library(ExpDes.pt)
+dados <- ex4
+library(ggcorrplot)
+corr <- cor(dados[,c(1,4, 5, 6, 7, 8, 9, 10)])
+p.valores <- cor_pmat(dados[,c(1,4, 5, 6, 7, 8, 9, 10)])
+ggcorrplot(corr, lab=TRUE, p.mat=p.valores, type="lower")
+```
+
+## Teste do chi-quadrado ($\chi^2$)
+
+Identificar a correlação entre duas variáveis númericas é, de certa forma, mais intuitivo. Basta observarmos o que ocorre com uma variável, quando outra variável aumenta ou diminui. Porém, como identificamos a correlação entre duas variáveis categóricas?
+
+![](images/chisq.png){width="508"}
+
+A solução é criar uma tabela de dupla entrada e verificar se a frequência entre os níveis de um fator, muda quando observamos os níveis de outro fator.
+
+## Teste do chi-quadrado ($\chi^2$)
+
+A fórmula do teste de $\chi^2$ é:
+
+$$
+\chi^2=\sum\frac{(o_i-e_i)^2}{e_i}
+$$
+
+Onde $o_i$ é o valor observado e $e_i$ é o valor esperado, ou seja, a frequência que se espera, caso não exista associação entre as duas variávies.
+
+$*$ Quanto maior o valor, maior a probabilidade das variáveis estarem associadas, ou seja, menor será o seu p-valor referente na tabela da distribuição do $\chi^2$.
+
+## Teste do chi-quadrado ($\chi^2$)
+
+No R, o teste de correlação entre duas variáveis pode ser realizado pela função:
+
+$$
+chisq.test(x, y,...)
+$$
+
+-   **x** e **y** podem ser tanto um vetor com cada variável, quanto uma matriz ou objeto do tipo data frame.
+
+## Exemplos no R - teste do chi-quadrado ($\chi^2$)
+
+```{r}
+dados <- data.frame(dano=c(rep("alto", 55), rep("baixo", 75)),
+                    trat=c(rep("a",50), rep("b", 5), rep("a", 15), rep("b", 60))) # dados fictícios
+table(dados) # tabela de frequência
+chisq.test(dados$dano, dados$trat) # teste de chi-quadrado
+```
+
+## Referências
+
+-   Bussap.
+
+-   Long, J.; Teetor, P. R cookbook (2 ed.). O'Reilly, 2019.
+
+[https://rc2e.com/](https://rc2e.com/linearregressionandanova)
+
+## Códigos

@@ -1,7 +1,6 @@
 ---
 title: "Importação e manipulação de dados"
 author: "Thomas Bruno Michelon"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   ioslides_presentation:
     css: ../../style.css
@@ -35,8 +34,6 @@ Existem duas formas de você trazer os dados do seu experiêmento para o R:
 Quando você possui poucos dados, uma maneira rápida é apenas digitando no próprio R. Porém, geralmente o experimento é uma grande planilha no Excel, com diversas abas. Nesse caso, a melhor maneira é ler os dados diretamente da planilha.
 
 ## Digitando seus dados no R
-
-A maneira mais simples de você digitar seus dados é usando a função:
 
 $$
 data.frame(nome_1=c(dados),nome_2=c(dados),...)
@@ -355,7 +352,7 @@ $*$ **Cuidado!** Você alterará seus dados "manualmente" e não por meio de có
 Pacote dplyr foi criado para manipulação de dados e, assim, possui várias funções para essa finalidade:
 
 | Função         | sintaxe                                                               |
-|----------------|-----------------------------------------------------------------------|
+|----------------|-------------------------------------------------------|
 | Selecionar     | $select(objeto, variável)$                                            |
 | Filtrar        | $filter(objeto, expressão)$                                           |
 | Substituir     | $mutate(objeto, variável = replace(variável, posição, novo\; valor))$ |
