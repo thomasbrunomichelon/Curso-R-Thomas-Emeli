@@ -1,0 +1,557 @@
+---
+title: "Intervalos de confiança e testes para uma e duas amostras"
+author: "Emily Silva Araujo e Thomas Bruno Michelon"
+date: '2022-07-19'
+output: ioslides_presentation
+---
+
+## Breve introdução a inferência estatística
+
+-   O propósito de um estudo estatístico, normalmente, é extrair conclusões sobre a natureza de uma população.
+
+-   Ao não ser possível estudá uma população grande em sua integridade, na maior parte dos casos, as conclusões obtidas devem basear-se no exame de apenas uma parte dos dados extraidos de essa população;
+
+## Breve introdução a inferência estatística
+
+-   Os dados obtidos da amostra podem ser organizados em tabelas ou gráficos,
+
+-   Entretanto, após a elaboração destes elementos, na maior parte dos casos, resulta mais eficaz expressar esta informação de forma clara e concisa empregando uma série de estatísticos.
+
+-   Vamos conhecer algumas destas formas de medida importantes: média e mediana
+
+## Estatístico de tendência central
+
+### Média
+
+-   A média aritimética de uma variável estatística é a soma de todos seus valores observados dividida pelo número destes valores.
+
+-   Para calcular a média de uma variável quantitativa, se usa a função **mean** que leva dois argumentos\
+
+mean(x, na.rm = FALSE)
+
+-   O parâmetro **x** indica a variável de interesse para a qual se deseja calcular a média;\
+-   O parâmetro **na.rm** é um valor lógico; em caso de ser TRUE significa que se devem remover as observações com NA, o valor por padrão para este parâmetro é FALSE;
+
+## Exemplo
+
+Foi medida a concentração de colinesterasa em milimol/min/ml em um reconto de eritrócitos de 33 agricultores expostos a inseticidas agrícolas, obtendo-se os seguintes dados:
+
+***
+
+```{r, eval=TRUE}
+Individuo <- c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33)
+Nivel_colinesterasa <- c(10.6, 12.5, 11.1, 9.2, 11.5, 9.9, 11.9, 11.6, 14.9, 12.5, 12.3, 12.2, 10.8, 16.5, 15, 10.3, 12.4, 9.1, 7.8, 11.3, 12.3, 9.7, 12, 11.8, 12.7, 11.4, 9.3, 8.6, 8.5, 10.1, 12.4, 11.1, 10.2)
+colinesterasa <- data.frame(Individuo,Nivel_colinesterasa)
+head(colinesterasa)
+mean(Nivel_colinesterasa)
+```
+
+Assim, podemos dizer que o nível médio de colinesterasa no sangue de este grupo de agricultores é 11.31 milimol/min/ml.
+
+## Inconvenientes da média
+
+-   A média é muito sensível a valores extremos da variável; uma vez que todas as observações interferem no cálculo da média, o surgimento de uma observação extrema fará com que a média de desloque na direção deste valor extremo.
+
+-   Não é recomendável usar a média como medida central nas distribuições muito assimétricas;
+
+-   Se consideramos uma variável discreta, por exemplo, o número de filhos nas famílias brasileiras, o valor da média pode não pertencer ao conjunto de valores desta variável, exemplo: 1.2 filhos
+
+## Mediana
+
+-   Consideramos uma variável discreta *X* cujas observações tenham sido ordenadas de menor para maior.
+
+-   Chamaremos mediana (Med), ao valor da variável que deixa por debaixo de si 50 % das observações. Isto é, a metade são valores menores ou iguais a **Med** e a outra metade maiores ou iguais.
+
+## Propriedades da mediana
+
+-   Como medida descritiva, tem a vantagem de não estar afetada pelas observações extremas, uma vez que não depende dos valores que toma a variável, e sim da ordem que estas assumem. Por isto, seu uso é adequado em distribuições assimétricas.
+
+-   Seu cálculo é rápido e de interpretação simples.
+
+-   Distintamente da média, a mediana de uma variável discreta é sempre um valor da variável que estudamos (Por exemplo: a mediana do número de filhos sempre será um valor inteiro)
+
+## Exemplo 1 de mediana
+
+Calcular a concentração mediana de colinesterasa dos agricultores desta base de dados.
+
+Para obter a mediana usamos o seguinte código:
+
+```{r, echo = TRUE}
+median(Nivel_colinesterasa)
+
+```
+
+## Exemplo 2 de mediana
+
+Calcular a mediana dos seguintes valores:
+
+```{r, echo = TRUE}
+x3 <- c(0,0,0,1,1,2,2)
+median(x3)
+
+```
+
+Podemos ver que a mediana aqui é 1, pois é o número central que separa igualmente os valores menores ou iguais a mediana da outra metade contendo valores maiores ou iguais a esta.
+
+## Estimação por intervalos de confiança (IC)
+
+
+- A estimação por intervalos de confiança (IC) indica que o valor do parâmetro fica entre um conjunto de valores.  
+
+
+- **IC** é um conjunto aleatório que depende da amostra escolhida. Por tanto, para cada amostra teremos um intervalo de confiança diferente.  
+
+
+## Função t.test
+
+- A função **t.test** é a função do R que nos proporcionará os intervalos de confiança e os testes de hipóteses para a média, para dados não pareados e para a diferença de médias.  
+
+- Entretanto, não se pode usar para os casos em que a variância ou as médias populacionais sejam conhecidas, e sim quando houver que estimá-las a partir dos dados existentes.
+
+## Função t.test
+
+- Para poder aplicar esta função, é necessário conhecer os dados individualmente, uma vez que não podemos utilizá-la quando apenas conhecemos os valores das médias ou quasi-variâncias amostrais e não os dados originais de onde foram obtidas.  
+
+- A função e seus argumentos são os seguintes:
+
+t.test(x, y = NULL,
+       alternative = c("two.sided", "less", "greater"),
+       mu = 0, paired = FALSE, var.equal = FALSE,
+       conf.level = 0.95, ...)
+
+## Função t.test 
+
+- Em **x**, incorporamos os dados da amostra, se estamos trabalhando com inferência para apenas uma amostra. Se estamos tratando de dados não pareados ou a comparação de duas amostras independentes, introduziremos os dados da segunda amostra no argumento **y**.
+
+- O terceiro argumento “alternative” apresenta três opções: two.sided, que é a que se utiliza por padrão e que corresponde no caso de contrastes bilaterais (que significa, o cálculo de intervalos de confiança); *greater*, correspondente ao caso de hipótese nula menor ou igual  frente a hipótese alternativa de maior, e *less* para o caso de hipótese nula de maior ou igual frente a alternativa de menor. Sempre devemos especificar estas opções usando aspas (“ ”). Por exemplo: “two.sided”.
+
+- Com o argumento **mu** indicamos o valor da hipótese nula.
+
+## Função t.test 
+- Se especificamos paired = F, significa que se esta usando dados não pareados. Em caso de que sejam dados pareados, devemos especificar colocando paired= T. F significa FALSE (falso), e T significa True (verdadeiro). 
+
+- O argumento **var.equal** nos permite indicar que tipo de situação temos no caso de estarmos realizando  a comparação  de duas populações independentes. 
+
+- Se escrevemos var.equal= T, significa que temos uma situação onde as variâncias de ambas as populações são supostamente iguais e o intervalos e o teste será baseado normalmente em uma t de Student.
+
+## Função t.test 
+
+- Se especificarmos var.equal= F, significa que ambas variâncias das populações são supostamente diferentes e, neste caso, estamos requerendo um intervalo ou teste baseado em uma t de Student, mas onde os graus de liberdade se determinam por uma aproximação de Welch.
+
+- O último argumento permite especificar o nível de significância do teste.
+
+## Função t.test
+
+- No caso de querer comparar duas amostras independentes, vamos ter que supor que as variâncias das populações são iguais ou distintas.
+
+- Para contrastar qual das situações admitimos como válida, deveremos determinar o intervalo de confiança, ou equivalentemente o teste de hipóteses do seu cociente. Para isso poderemos utilizar a função de R:
+
+### var.test(x, y, ratio, alternative= “two.sided“, conf.level=0.95)
+
+## Função var.test
+
+- Nesta função se incorpora os dados nos argumentos **x** e **y**.
+
+- Em **ratio** especificamos a hipótese nula, que será ratio= 1 no caso de querer comparar a igualdade das variâncias populacionais.
+
+- Com **alternative** indicamos o sentido da hipótese alternativa, *two.sided* é a opção que se utiliza por padrão e que corresponde ao caso de igual frente a distinta; *greater*, corresponde ao caso de hipótese alternativa maior, e *less* para o caso de alternativa de hipótese menor.  
+
+## Média de uma população com distribuição normal
+### Exemplo 1
+
+- Com o objetivo de verificar se a força da gravidade faz diminuir significativamente a estatura de uma pessoa ao longo do dia, foram selecionados ao azar 10 individuos, mulheres de 25 anos. Estas pessoas tiveram sua altura medida em cm pela manhã, justo depois de levantarem-se (Xi) e Yi corresponde ao valor da medida pela noite antes de ir dormir. Foram obtidos os seguintes valores:
+
+## Exemplo 1
+
+x <- c(169.7,168.5,165.9,177.8,179.6,168.9,169.2,167.9,181.8,163.3)  
+y <- c(168.2,165.5,164.4,175.7,176.6,166.1,167.1,166.3,179.7,161.5)
+
+- Se trata de um caso de dados pareados onde se mede a altura pela manhã e pela noite nos mesmos individuos.
+
+- É possível, primeiro calcular as diferenças (Di= Yi – Xi) e depois executar a função t.test para uma amostra, ou melhor, utilizar os pares de dados e indicar que são dados pareados com o argumento **paired**.
+
+## Exemplo 1
+
+```{r, warning= F, echo = TRUE}
+x <- c(169.7,168.5,165.9,177.8,179.6,168.9,169.2,167.9,181.8,163.3)
+y <- c(168.2,165.5,164.4,175.7,176.6,166.1,167.1,166.3,179.7,161.5)
+t.test (x,y,paired=T)
+```
+
+
+## Exemplo 1
+
+- Se queremos analisar se existe diminuição significativa das alturas ao longo do dia, deveremos contrastar as hipóteses µx < µy, a qual, como sabemos  deverá ir como hipótese alternativa.  
+
+- Isto é, devemos contrastar H0:µx - µy ≤ 0 frente a hipótese alternativa, H1: µx - µy > 0.    
+
+## Exemplo 1
+
+```{r, warning= F, echo = TRUE}
+x <- c(169.7,168.5,165.9,177.8,179.6,168.9,169.2,167.9,181.8,163.3)
+y <- c(168.2,165.5,164.4,175.7,176.6,166.1,167.1,166.3,179.7,161.5)
+t.test (x,y,alternative="greater", paired=T)
+```
+## Conclusão do exemplo 1
+- Se observa que o p-valor do teste é suficientemente pequeno (p-value= 5.522e-07) como para concluir que não se aceita a hipótese nula 
+- Se conclue que ocorreu redução significativa da estatura ao longo do dia em esta população. 
+
+- se observa que o ponto crítico do teste de 1,8073,  é menor que o valor estatístico do contraste, 2,15.
+
+## Exemplo 2
+
+- Uma pessoa considera aceitável uma companhia de seguro se, em média, o tempo gasto na gestão de uma incidência (trâmites administrativos, contato com o perito, reparação de danos...etc) é inferior a 20 horas.  
+
+- Com objetivo de decidir se muda de companhia de seguros, registrou o tempo em horas que utilizava na gestão  de diferentes incidências escolhidas ao azar na sua companhia atual de seguros, obtendo os seguintes resultados: 18,5; 19; 21,7; 21; 18; 20 h  
+
+## Exemplo 2
+
+- Supondo que estes dados apresentam uma distribuição normal para estes tempos, deveriamos mudar de companhia de seguros ou não?
+
+
+## Exemplo 2
+
+  - Se denominamos X a variável de estudo, *tempo que utiliza em gestões com a companhia de seguros atual*, estamos interessados em verificar se é possível admitir que µ < 20. 
+  
+  - Consequentemente, devemos considerar esta hipótese  como alternativa e contrastar H0: µ ≥ 20, frente a alternativa  H1: µ < 20. 
+
+## Exemplo 2 - Resolução
+
+```{r, warning= F, echo = TRUE}
+x <- c(18.5,19,21.7,21,18,20)                         
+t.test (x,alternative="less", mu=20)
+```
+## Exemplo 2 - Conclusão
+
+  O p-valor de 0.3176, é suficientemente alto para aceitar a hipótese nula de que a companhia de seguros atual não resolve os serviços e trâmites em menos de 20 horas em média, o que levará o cliente a mudar de companhia de seguros.
+  
+## Exemplo 3
+ 
+ - Com o objetivo de comparar a velocidade de dois funcionários de um banco, foi solicitado que realizasem as mesmas 10 tarefas a cada um deles.   
+ 
+ - Foram então registrados os tempos em segundos que levaram individualmente para terminar cada uma das 10 tarefas.  
+ 
+## Exemplo 3
+
+- Supondo que os tempos observados seguem uma distribuição normal, podemos afirmar que ambos funcionarios trabalham igualmente em termos de velocidade? Admitindo um α = 0,05.  
+ 
+- Queremos contrastar a hipótese nula de igualdade da velocidade das médias de ambos funcionários
+ H0: µ1 = µ2 e, como as tarefas são as mesmas para ambos, estamos diante de um caso de dados pareados.   
+  
+## Exemplo 3 - Resolução
+```{r, warning= F, echo = TRUE}
+Empregado1 <-c(25,160,269,55,64,100,95,63,35,90)
+Empregado2 <-c(24,170,290,53,66,100,87,60,33,85)
+Empregado <- data.frame(Empregado1, Empregado2)
+head(Empregado)
+
+```
+
+
+## Exemplo 3 - Resolução
+
+```{r, warning= F, echo = TRUE}
+t.test(Empregado1,Empregado2,paired=T)
+```
+
+## Exemplo 3 - Conclusão
+
+- Obtendo-se um p-valor de 0.6628, devemos aceitar a hipótese nula de igualdade de velocidade de ambos funcionários. 
+
+## Média de uma população com distribuição de dados não necessariamente normal.
+### Amostras grandes (maior que 30 dados)
+
+- Os dados a seguir são valores de atividades (em micromol/minuto/gramas de tecido) de uma determinada enzima observada no tecido gástrico de 35 pacientes com carcinoma gástrico.
+
+## Exemplo
+
+```{r, warning= F, echo = TRUE}
+x<-c(0.36,1.185,0.524,0.87,0.356,2.567,0.566,
+1.789,0.578,0.578,0.892,0.345,0.256,0.987,
+0.355,0.989,0.412,0.453,1.987,0.544,0.798,
+0.634,0.355,0.455,0.445,0.755,0.423,0.754,
+0.452,0.452,0.450,0.511,1.234,0.543,1.501)
+```
+
+## Exemplo
+
+
+```{r, echo = TRUE}
+hist (x, prob=T, main =  "Histograma de x")
+
+```
+
+***
+Este histograma mostra uma forte assimetria para a direita, a qual sugere que os valores de atividade não seguem uma distribuição normal.
+
+## Exemplo
+
+Para determinar o intervalo de confiança para a média (de uma população não necessariamente normal, amostras grandes), de coeficiente de confiança 0.95.
+
+***
+```{r, echo = TRUE}
+t.test(x)
+
+```
+
+O intervalo de confiança obtido foi [0.5749635, 0.9310365], considerando que os dados seguem uma distribuição t de Student.
+
+## Quociente de variâncias de duas populações normais independentes
+
+  - Entre dois cinemas, se deseja escolher um de forma que seja possível estimar, com pouca margem de erro, o número aleatório de pessoas na fila, e por tanto, estimar uma hora adequada de chegar na fila do cinema.  
+  
+   - Com este propósito, foi anotado o número de pessoas na fila nos dez minutos antes de início do filme, durante sete dias escolhidos ao azar, tanto no cimena 1 como no cinema 2.   
+  
+  ***
+  - Os seguintes resultados foram obtidos:  
+ 
+```{r, echo = TRUE}
+Cine1 <- c(40,48,88,74,80,75,85)
+Cine2 <- c(64,75,70,80,75,69,79)
+
+Cine <- data.frame(Cine1, Cine2)
+head(Cine)
+```
+ 
+## Exemplo
+  
+  Supondo que o número aleatório de pessoas, em cada uma das filas do cinema, possa ser modelizado mediante uma distribuição normal, pede-se que se determine o intervalo de confiança, com o coeficiente de confiança de 0,99 para o cociente de variâncias.
+  
+## Exemplo - Resolução
+
+```{r, echo = TRUE} 
+Cine1 <- c(40,48,88,74,80,75,85)
+Cine2 <- c(64,75,70,80,75,69,79)
+var.test(Cine1,Cine2,conf.level=0.99)
+```
+
+
+## Exemplo 2
+ 
+- Na França, os trens chegam pontualmente em seu destino, ao menos em média.  
+
+- Isto é, se chamamos X a diferença entre a hora de chegada e a hora prevista de chegada para os trens de proximidade, esta média deveria ser igual a zero (µ1=0).   
+
+- Se chamamos Y a diferença entre a hora de chegada e prevista para os trens de longa distância, a média de Y é µ2=0. Ainda, admite-se que tanto X quanto Y seguem distribuições normais.  
+ 
+ 
+## Exemplo 2
+
+- Os trens de longa distância percorrem distâncias significativamente superiores comparado com os trens de curto percorrido.   
+
+- Desta forma, parece razoável supor que a chegada dos trens de longo percorrido, ao depender de um número maior de fatores não previstos, podem ocorrer maiores variações comparado com a hora de chegada de trens de curta distância.  
+
+## Exemplo 2
+
+- Pergunta: Os trens de longa distância apresentam variância de hora de chegada significativamente superior aos trens de curta distância?  
+
+- Para analisar este problema foram escolhidos aleatoriamente n1=20 horas de chegadas de trens de curto percorrido e n2=10 de trens de longo percorrido, obtendo-se as seguintes diferenças em minutos, Xi e Yj
+
+## Exemplo 2
+```{r, echo = FALSE} 
+Trem_Curto_xi<-c(-1.1,2.1,3,0,-1.5,2.3,1.5,-2.1,0,1.2,1.9,2.2,2.1,1.4,-3,0,2.3,-1.9,2.2,0)
+Trem_longo_yj<-c(2.1,3.1,-1,4.1,-1.2,0,-1.1,-2.1,1.1,0)
+
+Trem <- data.frame(Trem_Curto_xi, Trem_longo_yj)
+head(Trem)
+```
+
+***
+- Contrastar, ao nível de significância α=0,05 se realmente esta diferença é significativa.  
+
+- Se trata de um teste unilateral, onde a hipótese nula é H0:  αX ≥ αY, e a hipótese alternativa é H1:  αX < αY.
+
+## Exemplo 2 - Resolução
+
+- Para contrastar as hipóteses em questão, primeiro incorporamos os dados e logo se executa a função var.test  
+```{r, echo = FALSE} 
+Trem_Curto_xi<-c(-1.1,2.1,3,0,-1.5,2.3,1.5,-2.1,0,1.2,1.9,2.2,2.1,1.4,-3,0,2.3,-1.9,2.2,0)
+Trem_longo_yj<-c(2.1,3.1,-1,4.1,-1.2,0,-1.1,-2.1,1.1,0)
+var.test(Trem_Curto_xi,Trem_longo_yj,alternative="less")
+```
+## Exemplo 2 - Conclusão
+
+- O p-valor do teste é 0.2879, suficientemente grande para aceitar a hipótese nula, 
+- Não existe uma variação menor entre a hora de chegadas dos trens de curto percorrido em relação aos de longo percorrido.
+
+## Diferença de médias de duas populações com distribuições normais independentes, e não necessariamente normais: Amostras grandes
+
+## Exemplo 1
+
+Um grupo de pesquisadores de uma estação antártica estiveram de acordo em participar em um estudo nutricional.
+
+O objetivo era analisar os níveis de vitamina C em pessoas vivendo em climas extremamente frios.
+
+## Exemplo 1
+
+Para isso, as pessoas da estação foram divididas ao acaso em dois grupos.  
+
+O grupo 1 recebeu um suplemento de vitamina C e o grupo 2 foi utilizado como grupo testemunha.
+
+## Exemplo 1
+
+Os dados sobre os níveis de vitamina C obtidos no sangue foram:
+
+```{r, echo = TRUE} 
+
+Grupo1_vitamina_C<-c(18.3,9.3,12.6,15.7,14.2,13.1,14.3,16.2,18.1,19.4,15.5,11.7)
+Grupo2_testemunha<-c(24.9,16,26.3,25.5,19.3,16.8,15.7,24.6,19.9,9.4,17.4)
+
+```
+
+***
+A hipótese a contrastar será:  
+H0: µ1 ≥ a µ2  
+H1: µ1 < µ2  
+
+- Admitindo que os niveis de vitamina C seguem uma distribuição normal em ambas populações
+- Também se admite que as variâncias são iguais
+
+## Exemplo 1 - Resolução
+
+```{r, echo = FALSE} 
+
+Grupo1_vitamina_C<-c(18.3,9.3,12.6,15.7,14.2,13.1,14.3,16.2,18.1,19.4,15.5,11.7)
+Grupo2_testemunha<-c(24.9,16,26.3,25.5,19.3,16.8,15.7,24.6,19.9,9.4,17.4)
+t.test(Grupo1_vitamina_C,Grupo2_testemunha,alternative="less",var.equal=T)
+```
+## Exemplo 1 - Conclusão
+
+  - O p-valor de 0.006722 obtido neste teste é suficientemente pequeno para rejeitar a hipótese nula (H0: µ1 ≥ a µ2), e inferir com base nestes dados que a administração de vitamina C em ambientes muito frios diminui os níveis de ácido ascórbico no sangue.
+  
+## Exemplo 2
+
+Escolhidas ao acaso, 10 pessoas de uma determinada população foi anotado seu peso em kg (X1) e sua altura em cm (X2), obtendo-se os seguintes dados:
+
+```{r, echo = FALSE} 
+x1<-c(80,82.5,75,92,87,79,87,95,70,80)
+x2<-c(180,180,170,192,190,181,188,199,175,185)
+medidas_pessoas <- data.frame(x1, x2)
+head (medidas_pessoas)
+```
+
+## Exemplo 2
+
+Supondo que as variáveis aleatórias (peso e altura) seguem distribuição normal, determinar o intervalo de confiança, de coeficiente de confiança 0.95, para a diferença de médias µ2 - µ1.
+
+## Exemplo 2 - Resolução
+
+```{r, echo = FALSE} 
+x1<-c(80,82.5,75,92,87,79,87,95,70,80)
+x2<-c(180,180,170,192,190,181,188,199,175,185)
+t.test(x2,x1,paired=T)
+```
+## Exemplo 2 - Resposta
+
+
+ O intervalo de confiança obtido é de: 98.91822, 103.58178
+ 
+## Diferença de médias de duas populações independentes, com distribuições de dados não necessariamente normais. Amostras grandes (> 30 dados)
+
+
+- Para comparar duas populações com dados binomiais, se pode utilizar a função de R **prop.test**
+
+prop.test (x, n, alternative= "two.sided", conf.level=0.95, correct=TRUE)
+
+## A função prop.test
+
+Os argumentos desta função são:  
+**x**= vetor de acertos  
+**n**= vetor de número de provas realizadas  
+**alternative**= tem 3 opções:  
+1- two.sided: utilizada como padrão  
+2 - greater: correspondente ao caso da hipótese nula menor ou igual comparada com a hipótese alternativa de maior  
+3 - less: para o caso de hipótese nula de maior ou igual comparada com a alternativa menor  
+**correct**: utilizado para indicar ao computador que utilize uma correção de Yates. Caso não se deseje usar esta correção deve ser indicado **correct= F**  
+
+## Exemplo 1
+
+- Em uma fazenda experimental esta sendo conduzido um ensaio para comparar a virulência de dois organismos patógenos causantes de uma determinada doença em frangos.  
+
+- Para isto, foram inoculados 250 frangos com o organismo 1, dos quais 183 manifestaram sinais da doença nas duas primeiras semanas.  
+
+- Outros 200 frangos foram inoculados com o organismo 2, dos quais 90 manifestaram sinais de doença nos primeiros 14 dias. 
+
+## Exemplo 1
+
+Supondo que os frangos estão isolados e que devido a isto as duas populações são independentes entre si, determinar o intervalo de confiança com α=0.95
+
+## Exemplo 1 - Resolução
+
+```{r, echo = TRUE}
+x<-c(183,90)
+n<-c(250,200)
+prop.test(x,n,correct=F)
+```
+## Exemplo 1 - Resposta
+
+O intervalo de confiança estimado foi de 0.1938625, 0.3701375.
+
+## Exemplo 2
+
+- Se deseja investigar se o aumento de acetona em uma população infantil é semelhante em ambos meninos e meninas.
+
+- Com este objetivo, foram tomadas ao acaso amostras de urina de 50 meninos e de 50 meninas.
+
+- Foi observada o aumento de acetona em 7 dos 50 meninos (7/50) e em 9 das 50 (9/50) meninas.
+
+## Exemplo 2
+
+- É possível ao nível de α = 0.05, aceitar que o sexo não influencia significativamente no aumento de acetona em a urina das crianças?
+
+
+## Exemplo 2 - Resolução
+
+```{r, echo = TRUE}
+x <-c(7,9)
+n <- c(50,50)
+prop.test(x,n,correct=F)
+```
+
+## Exemplo 2 - Conclusão
+
+O p-valor de 0.5854 é suficientemente grande para aceitar a hipótese nula de que o sexo não influencia o aumento de acetona em a uria das crianças.
+
+## Exemplo 3 
+
+
+- Se deseja verificar se mulheres grávidas que convivem com gatos (população 1), apresentam um índice maior de toxomoplasmosis que as que não tem felinos na casa.
+
+- Para isso foram escolhidas ao acaso, mulheres grávidas no oitavo mês de gestação e posteriormente foi analisado a presença ou ausência de anticorpos de toxomoplasmosis.
+
+- As mulheres foram classificadas em dois grupos, sendo a convivência ou não com gatos o critério de divisão.
+
+## Exemplo 3 
+
+
+- mulheres com gatos = 40, das quais 15 apresentaram anticorpos (p1= 0.375)
+- mulheres sem gatos= 60, das quais 6 apresentaram anticorpos (p2= 0.1)
+
+H0: p1 ≤ p2
+
+H1: p2 > p1
+
+## Exemplo 3 - Resolução
+```{r, echo = TRUE}
+x <-c(15,6)
+n <- c(40,60)
+prop.test(x,n,alternative="greater",correct=F)
+```
+## Exemplo 3 - Conclusão
+
+- O p-valor de 0.0004705 é significativamente pequeno, sendo possível rejeitar a hipótese nula.  
+
+- Conclui-se que a convivência de mulheres grávidas com gatos influenciou a ocorrência de uma maior quantidade de anticorpos de toxomoplasmosis.  
+
+## Referências
+
+- Freddy Hernández; Olga Usuga.2021.**Manual de R**. <https://fhernanb.github.io/Manual-de-R/index.html>
+
+-   Crawley, M.J. The R book, 2007, Wiley.
+
+-   Pérez, A.G. Estadística aplicada con R, 2012. Universidad Nacional de Educación a distancia. Editorial Aranzadi, S.A.
+
+
+
+
+

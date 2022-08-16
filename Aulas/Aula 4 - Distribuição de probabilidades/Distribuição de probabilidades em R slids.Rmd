@@ -1,0 +1,540 @@
+---
+title: "Distribuição de probabilidades"
+author: "Emily Silva Araujo e Thomas Bruno Michelon"
+date: '2022-06-09'
+output: ioslides_presentation
+---
+
+## Variáveis aleatórias (v.a)
+
+### **Introdução**
+
+-   **Variável aleatória unidimensional**, é toda função que atribui um único número real, a cada sucesso elemental do espaço amostral.
+
+-   Aos possíveis valores de uma v.a se associam probabilidades de ocorrência.
+
+## Classificação das Variáveis aleatórias (v.a)
+
+-   **v.a discreta**: é aquela que pode tomar um único número finito ou infinito numerável de valores (não pode existir nenhum valor intermediário).
+
+-   Estes valores correspondem a experimentos nos quais um mesmo resultado pode ocorrer várias vezes, e devido a isto, existe o interesse em contá-los.
+
+-   **v.a. continua**: pode tomar valores numéricos dentro de um intervalo de modo que entre qualquer dos extremos do intervalo sempre existe outro possível valor.
+
+## Distribuições de probabilidade
+
+-   Uma distribuição de probabilidade descreve o comportamento aleatório de um fenômeno dependente do acaso.
+
+\- As distribuições de probabilidade podem ser **discretas** ou **contínuas**.
+
+## Função de massa de probabilidade
+
+-   Seja X uma v. a. discreta que toma os valores x1, ..., xn, já ordenados.
+
+-   Se chama função de massa de probabilidade a função que associa a cada xi sua respectiva probabilidade.
+
+## Função de distribuição de uma variável aleatória
+
+-   Esta função associa a cada nú mero real a probabilidade de que a variável tome valores menores ou iguais a este número
+
+## Funções básicas de R no cálculo de distribuições de probabilidades
+
+Existem quatro funções básicas de R que permitem determinar, respectivamente:
+
+-   os valores da função de distribuição;\
+-   a função de massa ou densidade (segundo se trate de uma distribuição discreta ou contínua);\
+-   os cuantiles; \
+-   números aleatórios de determinados modelos probabilísticos.
+
+## Funções básicas de R no cálculo de distribuições de probabilidades
+
+Em concreto se trata das funções:
+
+-   p*distribu* (x, par) com a qual calculamos o valor da função de distribuição do modelo *distribu* no ponto x. Isto é, F (x), sendo F a função de distribuição de *distribu*.
+
+-   d*distribu* (x, par) com a qual calculamos o valor da função de massa ou densidade da distribuição *distribu* no ponto x.
+
+-   q*distribu* (x, par) com a qual podemos calcular o p-cuantil da distribuição *distribu*. Isto é, (1/F)(p), sendo F a função de distribuição de *distribu*.
+
+-   r*distribu* (n, par) mediante a que podemos conseguir n valores obtidos ao acaso segundo o modelo *distribu*.
+
+## Funções básicas de R no cálculo de distribuições de probabilidades
+
+-   O argumento **par** indica o local onde devemos incluir o parâmetro ou parâmetros da distribuição considerada.
+
+-   De modo que, se desejamos obter por exemplo, o valor da função de distribuição da normal N(1,2) no ponto x=1,5, executaremos: pnorm (1.5, 1,2).
+
+```{r, echo = TRUE}
+pnorm (1.5, 1,2)
+
+```
+
+## **Modelos unidimensionais continuos**
+
+### **Distribuição normal**
+
+-   Compreender o tipo de distribuição dos dados é importante em estatística paramétrica.
+
+    ![](figuras/grafico%20normal%201.png){width="530"}
+
+## **Distribuição normal**
+
+-   A forma de sino de Gauss depende dos parâmetros: média (μ) e desvio padrão (σ).\
+-   A média indica a posição do sino (centralização);\
+-   O desvio padrão (σ) será o parâmetro de dispersão.\
+-   Quanto menor seja esta dispersão, maior quantidade de massa de probabilidade haverá concentrada perto da média\
+-   Quanto maior seja esta dispersão, o sino sera mais achatado.
+
+## **Distribuição normal**
+
+Para conhecer as caracteristicas de distribuição normal em R:
+
+\
+- pnorm (x, a, b) \# função de distribuição no ponto x da normal (a, b)
+
+ \
+- dnorm (x, a, b) \# função de densidade no ponto x da normal (a, b)
+
+ \
+- qnorm (p, a, b) \# cuantil de ordem p da normal (a, b) 
+
+\
+- rnorm (n, a, b) \# amostra aleatoria de tamanho n da normal (a, b)
+
+## **Distribuição normal**
+
+Exemplo: Vamos supor que foram medidas 100 pessoas.\
+A média de altura foi 170 cm e o desvio padrão foi de 8 cm.\
+Podemos perguntar tres tipos de questões sobre dados como estes:
+
+-   Qual é a probabilidade de selecionarmos por acaso um indivíduo que seja:
+
+a)  Menor que uma determinada altura?
+b)  Mais alto que uma determinada altura?
+c)  Que tenha altura intermediária entre uma altura especificada e outra?
+
+------------------------------------------------------------------------
+
+A área embaixo da totalidade da curva é 1; todos tem uma altura entre menos infinito e mais infinito.
+
+a)  A probabilidade de que uma pessoa, selecionada ao acaso deste grupo, seja menor que 160 cm.
+
+    ![](figuras/graficos%20normal1.png){width="614"}
+
+------------------------------------------------------------------------
+
+**Nos precisamos converter esta altura em um valor z**.
+
+Isto significa que é necessário converter 160 cm em quanto se desvia da média, o que pode ser feito com o seguinte cálculo:
+
+z = (160 - 170)/8 = -1.25
+
+------------------------------------------------------------------------
+
+Agora temos que encontrar a probabilidade do valor da "standard normal" usando este valor de - 1.25 ou menor.\
+Este é o valor embaixo da área da esquerda da função de densidade.
+
+A função que precisamos para isso é a pnorm e o nosso z valor.
+
+```{r, echo=TRUE}
+pnorm(-1.25)  
+```
+
+Resposta da primeira pergunta: a probabilidade de que uma pessoa, selecionada ao acaso deste grupo, seja menor que 160 cm é de 10,5 %.
+
+------------------------------------------------------------------------
+
+Qual a probabilidade de selecionar uma pessoa e encontrar que ela é maior de 185 cm?
+
+![](figuras/grafico%20normal3.png){width="413"}
+
+```{r, echo=TRUE}
+z= (185 - 170)/8
+z
+```
+
+------------------------------------------------------------------------
+
+Então verificamos qual a probabilidade associada com este valor usando pnorm
+
+```{r, echo=TRUE}
+ pnorm(1.875)
+
+```
+
+------------------------------------------------------------------------
+
+0.9696036 é a probabilidade que alguém seja menor ou igual a 185 cm.
+
+O que necessitamos é trabalhar com o complemento disto:
+
+```{r, echo=TRUE}
+ 1 - pnorm(1.875)  
+```
+
+Qual é a probabilidade de selecionar uma pessoa e encontrar que ela é maior de 185 cm?
+
+Resposta: 3 %.
+
+------------------------------------------------------------------------
+
+Por fim, desejamos saber qual é a probabilidade de selecionar uma pessoa entre 165 cm e 180 cm.
+
+![](figuras/grafico%20normal4.png){width="468"}
+
+------------------------------------------------------------------------
+
+Para isto, teremos que calcular dois z valores.
+
+```{r, echo=TRUE}
+z1 = (165 - 170)/8
+z1
+z2 = (180 - 170)/8
+z2
+```
+
+------------------------------------------------------------------------
+
+O importante aqui é notar que desejamos saber a probabilidade de selecionar uma pessoa entre estes dois z valores, portanto, devemos subtrair a menor probabilidade da maior probabilidade:
+
+```{r, echo=TRUE}
+pnorm(1.25) - pnorm(-0.625)  
+```
+
+Portanto, descobrimos que existe a chance de 63 % de selecionar uma pessoa mediana (maior de 165 cm e menor de 180 cm) deste grupo amostra de pessoas com altura média de 170 cm e desvio padrão de 8 cm.
+
+## **O teorema do limite central**
+
+Se você toma amostras repetidas de uma população com variancia finita e calcula suas médias, então as médias serão normalmente distribuidas.
+
+## **Gamma**
+
+-   A distribuição gamma é útil para descrever processos onde os dados estão deslocados positivamente.
+
+-   Um importante uso da distribuição gama é descrever a medição de dados contínuos, os quais não seguem uma distribuição normal.
+
+-   É uma distribuição de dois parâmetros, conhecidos como forma (shape) e taxa (rate)
+
+-   Casos especiais da distribuição gamma são a **exponencial** e o **qui-quadrado**.
+
+## **Gamma**
+
+-   É usada para modelar valores de dados positivos que são assimétricos à direita e maiores que zero.
+
+-   É muito utilizada por exemplo, em Meteorologia, para descrever distribuição de precipitação.
+
+------------------------------------------------------------------------
+
+-   O comando a utilizar em R é gamma.
+
+-   pgamma (x, a, b) \# função de distribuição em x da gamma (a,b).\
+
+-   dgamma (x, a, b) \# função de densidade em x da gamma (a, b).
+
+-   qgamma (p, a, b) \# cuantil de ordem p da gamma (a, b)\
+
+-   rgamma (n, a, b) \# amostra aleatória de tamanho n da gamma (a, b)
+
+## **Modelos unidimensionais associados a distribuições normais**
+
+### **Distribuição X² de Pearson**
+
+pchisq (x, n) \# função de distribuição em x da Chi-quadrado com n grados de liberdade.\
+dchisq (x, n) \# função de densidade em x da Chi-quadrado com n graus de liberdade.\
+qchisq (p, n) \# cuantil de ordem p da Chi-quadrado com n grados de liberdade.\
+rchisq (m, n) \# amostra aleatória de tamanho m da Chi-quadrado com n graus de liberdade.
+
+------------------------------------------------------------------------
+
+A distribuição X² de Pearson se aproxima de uma normal a medida que N aumenta.
+
+```{r, echo=TRUE}
+
+x<-seq(0,40,len=100)
+plot(x,dchisq(x,4),type="l",col=1)
+
+```
+
+## **Distribuição X² de Pearson**
+
+```{r, echo=TRUE}
+x<-seq(0,40,len=100)
+plot(x,dchisq(x,9),type="l",col=2)
+```
+
+## **Distribuição X² de Pearson**
+
+```{r, eCho=TRUE}
+x<-seq(0,40,len=100)
+plot(x,dchisq(x,13),type="l",col=3)
+```
+
+## **Distribuição *t* de Student**
+
+A distribuição t de Student tem propriedades parecidas a N(0,1):
+
+-   É de média zero e simétrica;
+-   É algo mais dispersa que a normal, porém a variância decresce até 1 quando o número dos graus de liberdade aumenta;
+-   Para um número alto de graus de libertade se pode aproximar a distribuição de Student pela normal.
+
+## **Distribuição *t* de Student**
+
+O comando a utilizar em R é t.
+
+pt (x,n) \# função de distribuição em x da t-Student com n graus de liberdade\
+dt (x, n) \# função de densidade em x da t-Student com n graus de liberdade\
+qt (x, n) \# cuantil de ordem p da t-Student com n graus de liberdade\
+rt (x, n) \# amostra aleatória de tamanho m a t-Student com n graus de liberdade
+
+## Exemplo
+
+A distribuição t de Student se aproxima em uma N(0,1) quando n aumenta.\
+
+```{r, echo=FALSE}
+par(mfrow=c(2,2))
+x<-seq(-3,3,len=100)
+plot(x,dt(x,5),type="l",col=4,main="n=5")
+lines(x,dnorm(x),col=3,lty=2)
+plot(x,dt(x,8),type="l",col=4,main="n=8")
+lines(x,dnorm(x),col=3,lty=2)
+plot(x,dt(x,15),type="l",col=4,main="n=15")
+lines(x,dnorm(x),col=3,lty=2)
+plot(x,dt(x,30),type="l",col=4,main="n=30")
+lines(x,dnorm(x),col=3,lty=2)
+```
+
+------------------------------------------------------------------------
+
+A figura gerada estava representando a densidade da t de Student com n = 5, 8, 15 e 30 graus de liberdade e sobrepondo em cada caso, a densidade da normal estándar.
+
+## **Distribuição F de Snedecor**
+
+-   A distribuição F de Snedecor é frequentemente utilizada na inferência estatística para análise da variância.
+
+-   Exemplo: pode ser usada em teste de hipóteses para determinar se as variâncias de duas populações são iguais ou não.
+
+-   O estatístico de F calcula-se dividindo a variância maior pela variância menor.
+
+## **Principais características**
+
+-   Cada par de graus de liberdade da origem a uma distribuição F diferente;
+
+-   A distribuição F depende de dois parâmetros. O primeiro (v1) é o grau de liberdade do numerador e o segundo (v2) do denominador;
+
+-   A variável aleatória F é não-negativa, e a distribuição é assimétrica à direita;
+
+------------------------------------------------------------------------
+
+O comando em R é **f**. Assim:
+
+-   pf (x, n1, n2) \# função de distribuição em x da F (n1, n2)\
+-   df (x, n1, n2) \# função de densidade em x da F (n1, n2)\
+-   qf (p, n1, n2) \# cuantil de ordem p da F (n1, n2)\
+-   rf (n, n1, n2) \# amostra aleatória de tamanho n da F (n1, n2)
+
+## Modelos unidimensionais discretos
+
+### Distribuição binomial
+
+-   É uma distribuição discreta que modela o número de eventos em um número fixo de ensaios.
+
+-   Cada ensaio tem dois resultados possíveis e evento é o resultado de interesse de um ensaio.
+
+-   Pode ser usada para descrever um processo onde você estiver interessado na ocorrência de um evento e não em sua magnitude.
+
+-   É frequentemente usada no controle de qualidade, em pesquisas de opinião pública, em pesquisas médicas e em seguros.
+
+## Distribuição binomial
+
+O número de eventos (X) em n ensaios segue uma distribuição binomial, se forem atendidas as seguintes condições:\
+
+-   O número de ensaios é fixo.
+
+-   Cada ensaio é independente dos outros ensaios.
+
+-   Cada ensaio tem um de dois resultados: evento ou não-evento.
+
+-   A probabilidade de um evento é a mesma para cada ensaio.
+
+## Distribuição binomial
+
+O comando a utilizar no R é *binom*.
+
+\
+- pbinom (x, n, p) \# valor da função de distribuição no x da binomial (n, p)
+
+\
+- dbinom (x, n, p) \# valor da função de massa no x da binomial (n, p)
+
+\
+- qbinom (q, n, p) \# cuantil de ordem q da binomial (n, p)
+
+\
+- rbinom (m, n, p) \# muestra aleatória de tamanho m da binomial (n, p)
+
+## Exemplos
+
+1)  Use a distribuição binomial para calcular a probabilidade de que 3 ou mais defeitos estejam em uma amostra de 25 itens se a probabilidade de um defeituoso para cada ensaio for 0,02.
+
+O número de itens defeituosos (X) segue uma distribuição binomial com n = 25 e p = 0,02.
+
+```{r, echo = TRUE}
+dbinom (3, 25, 0.02)
+```
+
+## Exemplos
+
+2)  Se queremos representar a função de massa de uma distribuição binomial B (5, 0,33) executariamos a seguinte sequência para obter o gráfico.\
+
+-   Destacamos que no argumento type da função plot foi utilizada a opção **h** para obter um gráfico tipo histograma.
+
+------------------------------------------------------------------------
+
+```{r, echo = TRUE}
+
+x <- seq(0,5,len=6)
+plot(x,dbinom(x,5,0.33), type="h")
+
+```
+
+## Exemplos
+
+Se desejamos representar a função de distribuição de B (5, 0.33) executariamos a seguinte sequência:
+
+\- **s** significa o argumento type da função plot.
+
+------------------------------------------------------------------------
+
+```{r, echo = TRUE}
+x <- seq(0,5,len=6)
+plot(x,pbinom(x,5,0.33), type="s")   
+```
+
+## Distribuição de Poisson
+
+-   É uma distribuição de probabilidade de uma variável aleatória discreta;\
+-   Expressa a probabilidade de uma série de eventos ocorram independentemente de quando ocorreu o último evento.
+
+## Distribuição de Poisson
+
+-   A distribuição de Poisson é especificada por um parâmetro: lambda (λ).
+
+-   Este parâmetro é igual à média e à variância. Conforme lambda aumenta para valores suficientemente grandes, a distribuição normal pode ser usada para aproximar a distribuição de Poisson.
+
+-   A distribuição de Poisson pode ser usada para descrever o número de vezes que um evento ocorre em um espaço de observação finito.
+
+## Distribuição de Poisson
+
+-   Por exemplo, uma distribuição de Poisson pode descrever o número de chamadas por hora para uma central de atendimento.
+
+Uma variável segue uma distribuição de Poisson se as seguintes condições forem atendidas:
+
+-   Os dados são contagens de eventos (inteiros não-negativos com nenhum limite superior). 
+-   Todos os eventos são independentes. 
+-   A taxa média não muda sobre o período de interesse.
+
+## Distribuição de Poisson
+
+O comando a utilizar em R é pois.
+
+\
+- ppois (x, a) \# valor da função de distribuição de x de Poisson (a)
+
+\
+- dpois (x, a) \# valor da função de massa de x da Poisson (a)
+
+\
+- qpois (x, a) \# cuantil de ordem p da Poisson (a)
+
+\
+- rpois (n, a) \# amostra aleatória de tamanho n da Poisson (a)
+
+## O que é taxa de ocorrência?
+
+A taxa de ocorrência é igual à média (λ) dividida pela dimensão do seu espaço de observação.
+
+-   É útil para comparar contagens de Poisson coletadas em diferentes espaços de observação.
+
+## Exemplo 1
+
+A central **A** recebe 50 chamadas telefônicas em 5 horas, e a central **B** recebe 80 chamadas em 10 horas.
+
+Você não pode comparar diretamente esses valores porque seus espaços de observação são diferentes.
+
+Você deve calcular a taxa de ocorrência para comparar essas contagens.
+
+A taxa para a central telefônica A é (50 chamadas / 5 horas) = 10 chamadas/hora. A taxa da central telefônica B é (80 chamadas / 10 horas) = 8 chamadas/hora.
+
+## Exemplo 2
+
+-   Em uma editorial se assume que todo livro de 250 páginas tem uma media de 50 erros.
+
+-   Encontre a probabilidade de que em uma página qualquer não se encontrem erros.
+
+-   O objetivo é calcular P (X = 0); para obter esta probabilidade se usa a seguinte instrução.
+
+```{r, echo = TRUE}
+dpois(x=0, lambda=0.2)
+
+```
+
+Resposta: a probabilidade de P (X = 0) é de 0.8187
+
+## Distribuição Binomial Negativa
+
+-   A distribuição binomial negativa é uma distribuição discreta que modela o número de ensaios que são necessários para produzir um número de eventos específico.
+
+-   Cada ensaio tem dois resultados possíveis. Um evento é o resultado de interesse de um ensaio.
+
+## Distribuição Binomial Negativa
+
+O comando a utilizar em R é n*binom*.
+
+-   pnbinom (x, n, p) \# função de distribuição de x da binomial negativa (n, p)
+
+-   dnbinom (x, n, p) \# função de massa em x da binomial negativa (n, p)
+
+-   qnbinom (q, n, p) \# cuantil de ordem q da binomial negativa (n, p)
+
+-   rnbinom (n, n, p) \# amostra aleatória de tamanho n da binomial negativa (n, p).
+
+## Exemplo 1 de Binomial Negativa
+
+-   Uma família deseja ter filhos até conseguir 2 meninas, a probabilidade individual de obter uma menina é 0.5 e se supõe que todos os nascimentos são individuais, isto é, somente um bebê.
+
+-   Calcular a probabilidade de que se necessitem 4 filhos, isto é, 4 nascimentos para conseguir as duas meninas.
+
+------------------------------------------------------------------------
+
+-   Neste problema existe uma distribuição binomial negativa com r= 2 meninas, que são os êxitos desejados pela família.
+
+-   A variável X representa os fracassos, isto é, os meinos, até que se consigam os êxitos r = 2 desejados.
+
+------------------------------------------------------------------------
+
+-   Neste caso o que interessa é P (X = 2)
+
+-   A instrução para calcular a probabilidade é a seguinte.
+
+```{r, echo = TRUE}
+dnbinom(2, 2, 0.5)
+```
+
+## Exemplo 2 de Binomial Negativa
+
+Calcular P (família tenha ao menos 4 filhos)
+
+### P (X ≥ 2) = 1 −[P(X = 0) + P = 1)
+
+```{r, echo = TRUE}
+1 - sum(dnbinom(0:1, 2, 0.5))
+```
+
+## Referências
+- Freddy Hernández; Olga Usuga.2021.**Manual de R**. <https://fhernanb.github.io/Manual-de-R/index.html>
+
+-   Suporte ao minitab [minitab 18] (<https://support.minitab.com/pt-br/minitab/18/help-and-how-to/probability-distributions-and-random-data/supporting-topics/distributions/poisson-distribution/>)
+
+-   Crawley, M.J. The R book, 2007, Wiley.
+
+-   Pérez, A.G. Estadística aplicada con R, 2012. Universidad Nacional de Educación a distancia. Editorial Aranzadi, S.A.
