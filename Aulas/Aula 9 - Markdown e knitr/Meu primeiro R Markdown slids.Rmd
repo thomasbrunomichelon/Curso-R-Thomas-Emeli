@@ -1,0 +1,122 @@
+---
+title: "Meu primeiro documento em R Markdown"
+author: "Emily Silva Araujo"
+date: '2022-05-25'
+output: ioslides_presentation
+---
+
+
+## **O primeiro documento em R Markdown**
+
+- Para iniciar click em File<New file<R Markdown  
+
+***
+
+![](figuras/Figura%201.png)
+
+***
+- Se for necessário, você deverá instalar os pacotes requeridos. Click sim e o Rstudio instalará para você.    
+
+-   Existe a opção de escolher se deseja criar um documento, uma apresentação de slides ou até mesmo uma app (shiny).   
+
+-   Você pode mudar o tipo de documento gerado por meio da linha de saída do cabeçário, ou através da seleção de saída do botão knit abaixo do menu.    
+
+- Neste exemplo vamos criar um documento.
+
+***
+Digite o título do teu documento, o nome do autor e escolha uma opção de saída (HTML, PDF ou Word).   
+E aperte ok!  
+
+***
+![](figuras/figura 2.png)
+
+***
+
+![](figuras/figura%203.png)
+
+***
+
+- O documento aberto aparece com algum conteúdo, mas você pode apagar tudo e escrever seu relório com tranquilidade.  
+
+- Para iniciar um trecho onde o código do R vai estar embutido ("chunk") sempre tem que iniciar com '''{r} e fecha com '''  
+
+- Echo= True, significa que teu código e resultados serão exibidos no documento. 
+
+- Se a opção for Echo= False, apenas vai aparecer o código, mas sem mostrar o resultado.     
+
+## Embutindo um código em R
+
+    Isto é o que se considera "chunk" do código do R Markdown 
+
+-   Para ocultar o resultado do código de entrada, use echo=FALSE. '''{r, echo=FALSE}  
+-   Para mostrar apenas o código usado, use eval=FALSE. '''{r, eval=FALSE}  
+-   Para rodar o Código sem mostrar a entrada ou saída, use include=FALSE. '''{r, include=FALSE}  
+
+***
+
+``````{r, echo=TRUE}
+
+getwd() 
+setwd("C:/Users/hp/Documents/CURSO DE ESTATISTICA PARA UFPR 2022/material do curso - apostila e slids/apostila/Exemplos R Markdown 1")
+acaro_morango <- read.table("acaro.csv", header=T,  sep=";")
+head(acaro_morango)
+names(acaro_morango) 
+```
+
+## Podemos adicionar gráficos!
+
+```{r, echo=TRUE}
+x2 <- c(10, 26, 20, 1)
+n2 <- c("Coleoptera", "Hymenoptera", "Diptera", "outras")
+c2 <- c(2,3,4,5)
+pie(x2, labels = n2, col = c2, main = "Ordens de insetos  
+    capturadas em armadilhas Mcphail")
+
+```
+
+## Podemos incluir figuras!
+
+    Existem dois modos:  
+
+a) Digite: ! [ ] (figuras/nome da figura.png). Deste modo a figura vai aparecer no local onde você escreveu este código.     **Importante** ter uma pasta com as figuras salvas no teu diretório!    
+
+b) Apertar o botão inserir e clicar em figura. Ali vai abrir a janela onde será possivel achar teu arquivo seja do computador ou internet.    
+
+EXEMPLO:  ![](figuras/ufpr.png) 
+
+
+## Opções para rodar o documento – botão Run
+
+![](figuras/Figura 7.png)
+
+***
+Ali existem opções variadas para ir rodando trechos do script ou apenas partes deste.
+
+## **PDF e LaTeX**
+
+- Para **knit** um slide em PDF será necessario instalar LaTeX no teu computador.  
+
+- O LaTeX é um programa de edição de texto, o qual é usado para converter R Markdown no formato de texto para PDF.      
+
+### *Baixando e instalando LaTeX*
+
+-   LaTeX é livre.  
+    - Procure em: <https://www.tug.org/begin.html> para descarregar
+
+- Dependendo de tua velocidade de conecção com internet, esta instalação pode ser um tanto lenta, devido ao tamanho do documento que se deve baixar.  
+
+## **Considerações finais**
+
+- R Markdown é uma boa ferramenta para gerar documentos, especialmente para publicar em internet;  
+- Exige no inicio um pouco de esforço para aprender a usá-lo.  
+
+- Para maiores informações sobre o R Markdown visite o site indicado:  
+
+   + http://rmarkdown.rstudio.com/
+
+## Obrigada pela atenção
+
+
+**Emily Silva Araujo**  
+*araujosemily@gmail.com*
+
