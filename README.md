@@ -1,4 +1,4 @@
-# Curso-R-Thomas-Emeli
+# Curso-R-Thomas-Emily
 
 Título:
 Análise de dados com o programa R
@@ -118,7 +118,6 @@ Ementa:
   - 8.4	Contrastes relativos a análise de variância
     - 8.4.1	Teste de Kruskal-Wallis
     - 8.4.2	Teste de Friedman
-  - 8.5	Contraste de Spearman
-9.	Markdown
+  9.	Markdown
 10.	Usando o Knitr para escrever relatórios que podem ser facilmente verificados
 11.	Livros e literatura que podem ser uteis
