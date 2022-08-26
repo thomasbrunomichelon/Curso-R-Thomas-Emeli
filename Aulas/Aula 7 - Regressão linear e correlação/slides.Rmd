@@ -1,7 +1,6 @@
 ---
 title: "Regressão linear e correlação"
 author: "Thomas Bruno Michelon"
-date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
   ioslides_presentation:
     css: ../../style.css
@@ -23,18 +22,170 @@ knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 
 # Regressão linear
 
+## Tipos de regressão linear
+
+Regressão é o método usado quando tanto a resposta quanto a variável explicativa são **contínuas**. A forma mais simples que existe de regressão é:
+
+$$
+y_i=a+bx_i
+$$
+
+Primeiro, vamos relembrar que um **modelo linear** é diferente de uma **relação linear**. Uma relação linear é uma simples reta descrevendo duas variáveis. Já um modelo linear se trata dos coeficientes ligados linearmente, ou seja, uma regressão polinomial também é um modelo linear:
+
+$$
+y_i=a+b_1x_i+b_2x_i^2
+$$
+
+Aqui, abordaremos os modelos lineares de regressão, ou seja: regressão linear e polinomial.
+
+## Regressão linear
+
+Normalidade dos residuos, homogenidade e independencia.
+
+-   O teste *t* da função **summary** testa cada variável preditora assumindo que **todas as demais variáveis já estâo presentes no modelo**.
+
+-   O teste *F* da função **anova** testa as variáveis preditoras na seqüência apresentada no modelo, assumindo que as **variáveis anteriores** já estavam no modelo.
+
+## Exemplos no R - Regressão linear simples
+
+<http://www.leg.ufpr.br/~walmes/cursoR/ciaeear/ciaeear_11reg.html>
+
+## Regressão polinomial
+
+Regressão linar é na verdade um polinomio de grau um. Regressão polinomial é nada mais que adicionarmos a nossa mesma variável explicativa, porém elevada a um determianado grau:
+
+-   Polinômio de primeiro grau: $resposta \sim explicativa^1$
+
+-   Polinômio de segundo grau: $resposta \sim explicativa^1+explicativa^2$
+
+-   Polinômio de terceiro grau: $resposta \sim explicativa^1+explicativa^2+explicativa^3$
+
+Cada grau adiciona uma curvatura a mais no nosso gráfico, logo, fica evidente que em algum momento, a regressão polinomial poderá passar em todos (ou quase todos) os pontos.
+
+**A ideia é achar até qual grau devemos ir.**
+
+## Regressão polinomial
+
+É comum que a relação entre a resposta e a variável explicativa seja uma linha. Porém, devemos estabelecer que a relação é realmente linear **contanto que outra relação não descreve significantemente melhor os dados.**
+
+$*$ **Atenção!** Descrever a relação entre os dados é diferente de explicar o mecanismo/causa da relação entre as variáveis.
+
+## Exemplos no R - regressão polinomial
+
+## Fazendo predições
+
+Se temos a equação que associa a resposta à variável explicativa, podemos facilmente obter a partir da outra. A maneira mais simples de fazer isso no R é pela função:
+
+$$
+predict (object,newdata...)
+$$
+
+-   **object** é o objeto criado pela função **lm()**, ou seja, de onde será extraida a equação.
+
+-   **newdata** define os novos valores que serão usados para predizer a resposta.
+
+    -   Deve-se utilizar o formato data.frame com o nome da coluna igual ao nome da sua variável explicativa: **newdata=data.frame(tratamento=c(1,2,3,4,5,6))**
+
+    -   Esse argumento é opcional, se não utilizá-lo, será utilizado os próprios valores da sua coluna de dados explicativa para predizer a resposta.
+
+Exemplo:
+
+```{r}
+
+```
+
+## Calculando intervalos de confiança
+
+## Falta de ajuste
+
+Em experimentos planejados, geralmente existem **repetições no mesmo nível**:
+
+```{r, out.width="70%"}
+library(ExpDes.pt) # carregar pacotes com dados de exemplo ("ex1")
+dados <- ex1 # armazenar dados de exemplo em "dados"
+plot(dados$trat, dados$ig) # gráfico de dispersão
+```
+
+## Falta de ajuste
+
+As repetições tornam a situação um pouco diferente, pois podemos considerar como níveis de uma categoria ou como uma variável númerica, ou seja, podemos realizar uma **regressão** quanto uma **ANOVA**:
+
+```{r, echo=FALSE}
+par(mfrow=c(1,2)) # separar painel gráfico
+modelo.categorias <- lm(ig~as.factor(trat), data=dados) # modelo considerando categoria
+modelo.regressao <- lm(ig~trat, data=dados) # modelo considerando regressão
+plot(dados$trat, dados$ig) # gerar primeiro gráfico
+abline(modelo.regressao) # colocar linha da regressão
+plot(dados$trat, dados$ig) # gerar segundo gráfico
+points(c(0,5,10,15), predict(modelo.categorias)[c(1,7,12,17)],col="red", pch=19, lwd=5) # colocar as médias estimadas pelo modelo 2
+```
+
+## Falta de ajuste
+
+Assim, podemos testar a falta de ajuste de um modelo de regressão, comparando ele com o modelo considerando os níveis como categoria.
+
+```{r, echo=FALSE, out.width="70%"}
+library(dplyr)
+my <- as.vector(tapply(dados$ig,as.factor(dados$trat),mean))
+d <- rep(my[1],5)
+
+for (i in 2:4){
+d <- c(d,rep(my[i],5))
+}
+
+plot(dados$trat, dados$ig, pch=21, bg="yellow") # gráfico de dispersão
+model.reg <- lm(ig~trat, data=dados)
+for (i in seq(0,15, by=5)){
+  lines(c(i,i),c(d[i+1],predict(model.reg,list(trat=0:15))[i+1]),col="red", lwd=4)
+  points(i, d[i+1], col="red", pch=19, lwd=5)
+  }
+abline(model.reg)
+```
+
+Repare que a falta de ajuste não é nada mais que a **diferença entre a regressão e as médias de cada nível.**
+
+## Falta de ajuste
+
+Podemos comparar os dois modelos e idenficar se a falta de ajuste é significativa.
+
+```{r}
+modelo.categorias <- lm(ig~as.factor(trat), data=dados) # modelo considerando categoria
+modelo.regressao <- lm(ig~trat, data=dados) # modelo considerando regressão
+anova(modelo.regressao, modelo.categorias)
+```
+
+Repare que a diferença entre os dois modelos foi significativa ($p<0.05$) isso significa que a **regressão linear não é adequada**.
+
+## Falta de ajuste
+
+Então, se curva linear não é adequada, o que fazer?
+
+```{r}
+modelo.regressao.2 <- lm(ig~trat+I(trat^2), data=dados)
+anova(modelo.categorias, modelo.regressao.2)
+modelo.regressao.3 <- lm(ig~trat+I(trat^2)+I(trat^3), data=dados)
+anova(modelo.categorias, modelo.regressao.3)
+summary(modelo.regressao.3)
+anova(modelo.regressao.3)
+```
+
+<http://www.leg.ufpr.br/~walmes/cursoR/cnpaf3/cnpaf06poli.html>
+
+## Pacote ExpDes.pt
+
+O pacote permite acrescentar variáveis numéricas na análise e aborda os principais delineamentos.
+
+## Exemplos no R - regressão em DIC
+
+## Exemplos no R - regressão em DBC
+
 # Correlação
 
 ## Associação entre variáveis
 
 Para sabermos se duas variáveis estão relacionadas, podemos medir o grau de associação entre elas. Porém, a forma de medir a associação entre duas variáveis, depende da classe delas:
 
-| Variável 1         | Variável 2 | Medir associação                  |
-|--------------------|------------|-----------------------------------|
-| Numérica           | Númerica   | Correlação de pearson ou spearman |
-| Categórica ordinal | numérica   | Correlação de spearman            |
-| Categórica         | Categórica | Teste do chi-quadrado             |
-| Categórica         | Numérica   | ANOVA                             |
+![](images/association.png){width="464"}
 
 ## Correlação de Pearson
 
@@ -45,6 +196,8 @@ r=\frac{1}{n}\sum(\frac{x_i-\bar{x}}{DP(X)})(\frac{y_i-\bar{y}}{DP(Y)})
 $$
 
 A correlação de Pearson não é nada mais que a média ($\frac{1}{n}\sum$) da variação conjunta de $x$ e $y$ (($x_i-\bar{x}$)($y_i-\bar{y}))$, dividida pelo desvio padrão ($DP$) para anular a diferença de escala entre as variáveis.
+
+## Correlação de Pearson
 
 A medida varia de -1 e 1 e indica:
 
@@ -122,7 +275,7 @@ A correlação de Spearman é uma correlação **não-paramétrica** e é indica
 
 -   Dados com possíveis outliers;
 
-Além disso, pelo fato da correlação de Spearman ser calculada com base no ranqueamento dos dados, é possível utilizá-la em dados categóricos ordinais, ou seja, dados não numéricos, mas que possuem uma ordem entre eles: nível de infestação de uma doença, classes de qualidade, entre outros.
+$*$ **Atenção**, pelo fato da correlação de Spearman baseada no ranqueamento dos dados, é possível utilizá-la em **dados categóricos ordinais**: nível de infestação de uma doença, classes de qualidade, entre outros.
 
 ## Correlação no R
 
@@ -142,17 +295,37 @@ $$
 
 ## Exemplos no R - correlação
 
-```{r}
-library(ExpDes.pt)
-dados <- ex4
-cor(dados$k, dados$c, method = "pearson")
-cor(dados$k, dados$c, method = "spearman")
+### $1^\circ$ Carregando dados e criando gráfico
+
+```{r, out.width="50%"}
+library(ExpDes.pt) # carregar pacotes com dados de exemplo ("ex4")
+dados <- ex4 # armazenar dados de exemplo em "dados"
+plot(dados$k, dados$c) # gráfico de dispersão
+abline(lm(dados$c~dados$k)) # tendência
 ```
 
 ## Exemplos no R - correlação
 
+### $2^\circ$ Checando normalidade dos dados
+
 ```{r}
-cor(dados[,c(4, 5, 6, 7,8)])
+shapiro.test(dados$k) # teste de normalidade para variável "k"
+shapiro.test(dados$c) # teste de normalidade para variável "c"
+```
+
+## Exemplos no R - correlação
+
+### $3^\circ$ Correlação
+
+```{r}
+cor(dados$k, dados$c, method = "pearson") # correlação de Pearson
+cor(dados$k, dados$c, method = "spearman") # correlação de Spearman
+```
+
+## Exemplos no R - matriz de correlação
+
+```{r}
+cor(dados[,c(4, 5, 6, 7,8)], method="spearman") # matriz de correlação
 ```
 
 ## Teste de correlação
@@ -205,8 +378,8 @@ $$
 library(ExpDes.pt)
 dados <- ex4
 library(ggcorrplot)
-corr <- cor(dados[,c(1,4, 5, 6, 7, 8, 9, 10)])
-p.valores <- cor_pmat(dados[,c(1,4, 5, 6, 7, 8, 9, 10)])
+corr <- cor(dados[,c(4, 5, 6, 7, 8, 9, 10)])
+p.valores <- cor_pmat(dados[,c(4, 5, 6, 7, 8, 9, 10)])
 ggcorrplot(corr, lab=TRUE, p.mat=p.valores, type="lower")
 ```
 
@@ -214,7 +387,7 @@ ggcorrplot(corr, lab=TRUE, p.mat=p.valores, type="lower")
 
 Identificar a correlação entre duas variáveis númericas é, de certa forma, mais intuitivo. Basta observarmos o que ocorre com uma variável, quando outra variável aumenta ou diminui. Porém, como identificamos a correlação entre duas variáveis categóricas?
 
-![](images/chisq.png){width="508"}
+![](images/chisq.png){width="548"}
 
 A solução é criar uma tabela de dupla entrada e verificar se a frequência entre os níveis de um fator, muda quando observamos os níveis de outro fator.
 
@@ -251,10 +424,34 @@ chisq.test(dados$dano, dados$trat) # teste de chi-quadrado
 
 ## Referências
 
--   Bussap.
+-   Bussab, W. O.; Morettin, P. A. **Estatística Básica (9 ed.)**. Saraiva, 2017, p. 553.
 
--   Long, J.; Teetor, P. R cookbook (2 ed.). O'Reilly, 2019.
+-   Pimentel Gomes, F. **Curso de Estatística Experimental (12 ed.)**. Piracicaba, 1987, p. 467.
 
-[https://rc2e.com/](https://rc2e.com/linearregressionandanova)
+-   Long, J.; Teetor, P. **R cookbook (2 ed.)**. O'Reilly, 2019.
+
+    -   <https://rc2e.com/>
+
+-   Crawley, M.J. **The R Book**. Willey, 2013, 975p.
 
 ## Códigos
+
+\`\`\`{r## Regressão} library(ExpDes.pt) dados \<- ex4 r0 \<- lm(c\~1, data=dados) r1 \<- lm(c\~zn, data=dados) summary(r1) anova(r1)
+
+plot(dados$zn,dados$c) abline(r0)
+
+dados \<- data.frame( w \<- c(0.9,1.8,2.4,3.5,3.9,4.4,5.1,5.6,6.3), s \<- c(1.4,2.6,1.0,3.7,5.5,3.2,3.0,4.9,6.3))
+
+r0 \<- lm(s\~1, data=dados) r1 \<- lm(s\~w, data=dados) summary(r1) anova(r0,r1)
+
+## Lack of fit
+
+library(ExpDes.pt) dados \<- ex1 dic(dados$trat, dados$ig, quali=FALSE)
+
+r0 \<- lm(ig\~1, data=dados) r1 \<- lm(ig\~trat, data=dados) r2 \<- lm(ig\~poly(trat, 2, raw=TRUE), data=dados) r3 \<- lm(ig\~poly(trat, 3, raw=TRUE), data=dados) rc \<- lm(ig\~as.factor(trat), data=dados) summary(r2) anova(r0, r1, r2, r3)
+
+par(mfrow=c(1,2)) modelo.categorias \<- lm(ig\~as.factor(trat), data=dados) modelo.regressao \<- lm(ig\~trat, data=dados) plot(dados$trat, dados$ig) abline(modelo.regressao) plot(dados$trat, dados$ig) abline(modelo.categorias)
+
+predict(modelo.categorias) }
+
+\`\`\`

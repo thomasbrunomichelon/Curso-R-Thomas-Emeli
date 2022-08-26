@@ -35,7 +35,7 @@ $*$ **Importante:** como vamos estimar a média de cada tratamento, é important
 
 ## Delineamento Inteiramente Casualizado (DIC)
 
-Como supomos que os erros são normalmente distriuidos, podemos estimar a média de cada tratamento usando a média geral e o efeito do tratamento:
+Como supomos que os erros são normalmente distribuidos, podemos estimar a média de cada tratamento usando a média geral e o efeito do tratamento:
 
 $$
 \mu_j=\mu+T_j
@@ -47,7 +47,7 @@ $$
  \mu_j=T_j
 $$
 
-Dessa maneira, **o primeiro nível é usado como base o efeito dos demais níveis são somados a ele.** Apesar de ser diferente, o resultado é o mesmo.
+Dessa maneira, **o primeiro nível é usado como base e o efeito dos demais níveis são somados a ele.** Apesar de ser diferente, o resultado é o mesmo.
 
 ## Exemplo
 
@@ -62,7 +62,7 @@ p <- p + geom_hline(aes(yintercept = mean(ig)))
 p + stat_summary(fun = "mean", colour = "red", size = 6, geom = "point") + theme_classic(base_size = 20) + labs(x="tratamento", y="índice glicemico")
 ```
 
-A média geral (linha horizontal) é: $97.2$, esse é nosso $\mu$. Já a média **por** tratamento (ponto vermelho), é: dose 0 = $102.2$; dose 5 = $95.1$; dose 10 = $96.7$; dose 15 = $94.7$. Ou seja, dependendo do tratamento, a média dele é maior ou menor que nossa média geral, o quanto maior ou menor é o nosso **efeito do tratamento** ($T_j$). Por exemplo: o efeito da dose 0 é aumentar $5$ unidades da média geral ($97.2 - 102.2$).
+A média geral (linha horizontal) é: $97.2$, esse é nosso $\mu$. Já a média **por** tratamento (ponto vermelho), é: dose 0 = $102.2$; dose 5 = $95.1$; dose 10 = $96.7$; dose 15 = $94.7$. Ou seja, dependendo do tratamento, a média dele é maior ou menor que nossa média geral, o quanto maior ou menor é o nosso **efeito do tratamento** ($T_j$). Por exemplo: o efeito da dose 0 é aumentar $5$ unidades da média geral ($102.2 - 97.2$).
 
 ## Exemplos no R - DIC fatorial simples
 
@@ -87,7 +87,7 @@ $$
 
 -   **data** é o objeto com os dados.
 
-$*$ **Cuidado com a terminologia!** Linear models, significa modelo linear e significa que os coeficientes da fórmula são lineares entre eles e não que a relação entre a resposta e o tratamento é necesariamente linear (uma linha reta).
+$*$ **Cuidado com a terminologia!** Linear models, significa modelo linear e significa que os coeficientes da fórmula são lineares entre eles e não que a relação entre a resposta e o tratamento é necessariamente linear (uma linha reta).
 
 ## Exemplos no R - DIC fatorial simples
 
@@ -290,7 +290,7 @@ Se usarmos a função **plot()** em um modelo que criamos com a função **lm()*
 
 3.  **Quantil-quantil normal:** quantil é basicamente ordenar seus dados de forma crescente e observar como eles se distribuem. Quantil-quantil normal é você comparar a distribuição deles com a distribuição normal, que é a que esperamos que nossos resíduos tenham.
 
-4.  **Constant Leverage:** *leverage* é "quanto meu dado influencia no meu modelo". Como estamos medindo a distância (erro) de cada observção em relação ao nosso modelo, podemos ver o quanto esse único erro influencia todo nosso modelo. É uma forma de indentificarmos possíveis outliers.
+4.  **Constant Leverage:** *leverage* é "quanto meu dado influencia no meu modelo". Como estamos medindo a distância (erro) de cada observação em relação ao nosso modelo, podemos ver o quanto esse único erro influencia todo nosso modelo. É uma forma de indentificarmos possíveis outliers.
 
 ## Análise gráfica dos pressupostos
 
@@ -330,7 +330,7 @@ Então, a pergunta que fica é: **qual transformação utilizar?**
 
 Box-Cox é um **família** de transformações, ou seja, em sua fórmula, podemos tranformar nossos dados de diferentes formas **conforme um critério**. O critério é a escolha de uma váriável chamada $\lambda$.
 
-1.  Quando escolhemos algum valor de $\lambda \neq 0$, os dados ($y$) são transformados da a seguinte forma:
+1.  Quando escolhemos algum valor de $\lambda \neq 0$, os dados ($y$) são transformados da seguinte forma:
 
 $$
 y_i'= (y_i^\lambda-1)/\lambda
@@ -440,7 +440,7 @@ $$
 CV(\%)=\frac{\sqrt{QM\;residual}}{média \;da\;resposta}*100
 $$
 
-O QM é um nome para **variância** e, assim, o desvio padrão é apenas a sua raiz quadrada. Para experimentos no campo da agronomia, a precisão experiemental pode ser classificada conforme o CV(%) (Gomes, 1987):
+O QM é um nome para **variância** e, assim, o desvio padrão é apenas a sua raiz quadrada. Para experimentos no campo da agronomia, a precisão experimental pode ser classificada conforme o CV(%) (Gomes, 1987):
 
 | Coeficiente de Variação - CV (%) | Precisão experimental |
 |:--------------------------------:|:---------------------:|
@@ -479,12 +479,12 @@ $$emmeans(object, specs, type, … )$$
 
 -   type: usamos type="response" quando utilizamos outra distribuição que não a normal.
 
-## Pacote multicomp
+## Pacote multcomp
 
-É comum atribuirmos letras na nossa comparação de médias para facilitar a visualização delas: letras iguais/diferentes, médias iguais/diferentes. Para isso, usamos a função **cld()** (*compact letter display*) do pacote **multicomp**:
+É comum atribuirmos letras na nossa comparação de médias para facilitar a visualização delas: letras iguais/diferentes, médias iguais/diferentes. Para isso, usamos a função **cld()** (*compact letter display*) do pacote **multcomp**:
 
 ```{r, eval=FALSE}
-install.packages("multicomp")
+install.packages("multcomp")
 ```
 
 $$
@@ -564,7 +564,7 @@ fat2.dic(dados$revol, dados$esterco, dados$c, fac.names = c("revol", "esterco"))
 
 ## Contrastes ortogonais
 
-Imagine um experimento em que temos cinco níveis: solo sem adubção, com adubação orgânica 1 e 2; e com adubação química 1 e 2. Além de compararmos as médias duas a duas, poderiamos querer algumas comparações interessantes como:
+Imagine um experimento em que temos cinco níveis: solo sem adubação, com adubação orgânica 1 e 2; e com adubação química 1 e 2. Além de compararmos as médias duas a duas, poderiamos querer algumas comparações interessantes como:
 
 -   Adubar com alguma coisa foi melhor que sem aubação?
 
@@ -633,7 +633,7 @@ contrast(medias, method = list(c(3, -1, -1,-1), c(0,2,-1,-1), c(0,0,1,-1)))
 
 Alguns dados claramente pertencem a outra distribuição que não a normal: dados de contagem - Poisson (ex., número de plantas daninhas), dados binomiais (ex., germinação ou não germinação), entre outras.
 
-$*$ **Cuidado com a terminologia!** Distribuição é a distribuição de probabilidade que é simplesmente a probabilidade de obtermos um determinado valor de algo que medimos, como ocorre em nossas repetições. Existem algumas distribuições teóricas que utilizamos, já que mais fácil (e barato) do que realizarmos milhares de repetições.
+$*$ **Cuidado com a terminologia!** Distribuição é a distribuição de probabilidade que é simplesmente a probabilidade de obtermos um determinado valor de algo que medimos várias vezes (como em nossas repetições). Existem algumas distribuições teóricas que usamos, já que mais fácil (e barato) do que realizar milhares de repetições.
 
 Porém, diferente do modelo linear, em que a média do dados normais é obtida por uma **combinação linear entre os coeficientes** - coeficientes separados por uma soma por exemplo:
 
@@ -671,7 +671,13 @@ Assim, esse método é uma *generalização dos modelos lineares* (GLM), pois ob
 2.  Utilizar uma estatística não paramétrica.
 3.  Ignorar a não normalidade e prosseguir com a análise.
 
-Uma quarta alternativa é testar alguma outra distribuição, a qual não exige os pressupostos da normalidade e/ou que seja mais bem ajustada aos dados, **mesmo que esses atendam a normalidade**.
+Uma quarta alternativa é testar alguma outra distribuição, a qual não exige os pressupostos da normalidade:
+
+$$
+Média(transformação(dados)) \neq Transformação(média(dados))
+$$
+
+$*$ **Atenção!** Outra distribuição pode se ajustar melhor aos dados, **mesmo que esses atendam a normalidade**.
 
 ## Algumas distribuições - Normal
 
@@ -720,7 +726,7 @@ plot_grid(p, dens, ncol = 2, align = "h",
 
 ```
 
-**Cuidado!** Essa distribuição exige que a variância dos dados seja igual a média. Se a variância for maior, ocorre o que é chamado de superdisperção dos dados e isso sempre deve ser testado.
+**Cuidado!** Essa distribuição exige que a variância dos dados seja igual a média. Se a variância for maior, ocorre o que é chamado de **superdisperção** dos dados e isso sempre deve ser testado.
 
 ## Algumas distribuições- Binomial
 
@@ -1077,7 +1083,7 @@ modelo <- lm(ig~trat, data=dados) # criando modelo
 anova(modelo) # anova
 
 ### Comparações múltiplas
-## Pacote Emmeans e multicomp
+## Pacote Emmeans e multcomp
 library(ExpDes.pt) # carregando o pacote
 dados <- ex4 # armazenando ex4 em "dados"
 dados$revol <- as.factor(dados$revol) # transformando em fator
