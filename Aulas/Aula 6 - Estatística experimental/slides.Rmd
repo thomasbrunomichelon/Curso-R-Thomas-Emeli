@@ -472,7 +472,7 @@ $$emmeans(object, specs, type, … )$$
 -   *specs* é o argumento responsável pelo desdobramento das médias:
 
 | Número de fatores                       | simbolo | exemplo                               |
-|-----------------------------------------|---------|---------------------------------------|
+|----------------------------|------------------|---------------------------|
 | Um fator                                |         | specs = \~ tratamento                 |
 | Dois fatores: fator 1 dentro do fator 2 | $$|$$   | specs = \~ tratamento1 \| tratamento2 |
 | Dois fatores: todas as combinações      | $$*$$   | specs = \~ tratamento1 \* tratamento2 |
@@ -530,7 +530,7 @@ cld(medias, Letters = LETTERS, reversed = TRUE) # mostrando as médias com as "l
 O pacote **ExpDes.pt** engloba diversos delinementos e realiza os procedimentos automaticamente: ANOVA, testes de pressupostos e comparação de médias. Basta usar a função conforme o seu delineamento:
 
 | Delineamento                                                     |                Função                |
-|------------------------------------------------------------------|:------------------------------------:|
+|---------------------------------------------|:-------------------------:|
 | Inteiramente casualizado                                         |        $dic(trat, resp,...)$         |
 | Fatorial duplo inteiramente casualizado                          |  $fat2.dic(fator1, fator2, resp,…)$  |
 | Fatorial duplo inteiramente casualizado com tratamento adicional | $fat2.ad.dic(fator1,fator2,repet,…)$ |
@@ -544,7 +544,7 @@ $*$ **Nota**: se o pacote faz todas as etapas, o porque ensinar por meio de fun�
 Cada função possui diversos argumentos; porém, alguns são básicos e se repetem entre as funções:
 
 | Argumento   | O que é?                                                                                                   |
-|-------------|------------------------------------------------------------------------------------------------------------|
+|-----------------|-------------------------------------------------------|
 | trat        | Variável tratamento.                                                                                       |
 | resp        | Variável resposta.                                                                                         |
 | quali       | Se os tratamentos são (TRUE) ou não (FALSE) qualitativo.                                                   |
@@ -578,7 +578,7 @@ Assim, contrastes ortogonais são uma forma de compararmos **grupos** de médias
 
 Os contrastes são ortogonais quando você divide os níveis em grupos e o próximo contraste é a divisão do grupo anterior em um novo subgrupo:
 
-![](images/contrastes2.png){width="751"}
+![](images/contrastes2.png){width="753"}
 
 Logo, fica evidente que existem diversas combinações e que o número de contrastes será sempre 1 - o número de níveis.
 
@@ -1068,19 +1068,27 @@ bc <- boxcox(dados$ig~dados$trat) # testando os lambdas e identificando o melhor
 maior_likelihood <- which.max(bc$y) # maior valor do "log likelihood"
 lambda <- bc$x[maior_likelihood] # valor do lambda que corresponde ao maior "log likelihood"
 lambda # valor de lambda
-transformacao <- function(y, lambda) {
+bc <- function(y, lambda) { # criando uma função
   if (lambda == 0L) { # se o lambda for igual a 0, log(y)
     log(y)
   } else { # se for diferente de 0, (y^lambda)-1/lambda
     ((y^lambda) - 1) / lambda
   }
 }
-dados_transformados <- transformacao(dados$ig, 0.0202) # transformando
+dados_transformados <- bc(dados$ig, 0.0202) # transformando
 head(cbind(dados$ig, dados_transformados)) # mostrando os dados lado a lado (cbind)
 lm(dados_transformados~trat, data=dados) # modelo com os dados transformados
 ##ANOVA
 modelo <- lm(ig~trat, data=dados) # criando modelo
 anova(modelo) # anova
+
+## CV
+soma_de_quadrados_residual <- sum(residuals(modelo)^2) # Soma de quadrados
+quadrado_medio_residual <- soma_de_quadrados_residual/df.residual(modelo) # Quadrado médio
+desvio_padrao_residual <- sqrt(quadrado_medio_residual) # desvio padrão
+CV <- desvio_padrao_residual/mean(dados$ig)*100 # CV(%)
+CV # mostrando o CV
+
 
 ### Comparações múltiplas
 ## Pacote Emmeans e multcomp
@@ -1148,10 +1156,10 @@ AIC(modelo_normal, modelo_poisson, modelo_binomial_negativa) # comparando os mod
 ## O que realmente muda ?
 library(emmeans) # carregando pacote
 media_normal <- emmeans(modelo_normal, specs=~lote|peneira) # estimando as médias modelo normal
-media_poisson <- emmeans(modelo_poisson, specs=~lote|peneira) # estimando as médias modelo Poisson
+media_poisson <- emmeans(modelo_poisson, specs=~lote|peneira, type="response") # estimando as médias modelo Poisson
 library(multcomp) # carregando pacote com as "letras"
 letras_normal <- cld(media_normal, Letters = LETTERS, reversed = T) # média com as "letras"
-letras_poisson <- cld(media_poisson, Letters = LETTERS, reversed = T, type="response") # médias com as "letras"
+letras_poisson <- cld(media_poisson, Letters = LETTERS, reversed = T) # médias com as "letras"
 cbind(letras_normal, letras_poisson)[,c(1,2,8,16)] # colocando lado a lado as respostas
 library(ggplot2) # carregando ggplot2
 library(gridExtra) # carregando pacote para criar painél

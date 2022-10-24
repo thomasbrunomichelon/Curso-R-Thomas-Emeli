@@ -22,37 +22,79 @@ knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 60), tidy = TRUE)
 
 # Regressão linear
 
-## Tipos de regressão linear
+## Regressão linear
 
-Regressão é o método usado quando tanto a resposta quanto a variável explicativa são **contínuas**. A forma mais simples que existe de regressão é:
+Regressão é o método usado quando tanto a resposta quanto a variável explicativa são **contínuas**:
+
+```{r, out.width="70%", echo=FALSE}
+library(ggplot2)
+set.seed(1)
+x <- c(1:20 + rnorm(20, 1,1), 1:20 + rnorm(20, 1,1))
+y <- c(51:70 + rnorm(20,1,1), 51:70 + rnorm(20, 5,1))
+ggplot(as.data.frame(cbind(x,y))) +
+  aes(x=x, y=y) +
+  geom_point() +
+  theme_classic()
+```
+
+## Regressão linear simples
+
+A forma mais simples que existe de regressão é:
 
 $$
 y_i=a+bx_i
 $$
 
-Primeiro, vamos relembrar que um **modelo linear** é diferente de uma **relação linear**. Uma relação linear é uma simples reta descrevendo duas variáveis. Já um modelo linear se trata dos coeficientes ligados linearmente, ou seja, uma regressão polinomial também é um modelo linear:
+Ou seja, apenas dois parâmetros e uma variável explicativa. Isso é uma **regressão linear simples**:
+
+```{r, out.width="55%", echo=FALSE}
+library(ggplot2)
+set.seed(1)
+x <- c(1:20 + rnorm(20, 1,1), 1:20 + rnorm(20, 1,1))
+y <- c(51:70 + rnorm(20,1,1), 51:70 + rnorm(20, 5,1))
+ggplot(as.data.frame(cbind(x,y))) +
+  aes(x=x, y=y) +
+  geom_point() +
+  geom_smooth(formula=y~x, method="lm", se=FALSE) +
+  theme_classic()
+```
+
+## Regressão linear múltipla
+
+Porém, pode haver mais de uma variável explicando $y$:
+
+$$
+y_i=\beta_0+\beta_1x_1+\beta_2x_2
+$$
+
+Ou seja, eu posso estimar o valor de cada $y$ a partir do valor de duas outras variáveis ou mais:
+
+```{r, out.width="60%", echo=FALSE}
+library(ggplot2)
+set.seed(1)
+x <- c(1:20 + rnorm(20, 1,1), 1:20 + rnorm(20, 1,1))
+y <- c(51:70 + rnorm(20,1,1), 51:70 + rnorm(20, 5,1))
+data <- data.frame(x=x, y=y,g=c(rep("a",20), rep("b",20)))
+ggplot(data) +
+  aes(x=x, y=y, color=g) +
+  geom_point() +
+  geom_smooth(formula=y~x,method="lm", se=FALSE) +
+  theme_classic()+labs(color="Cultivar")
+```
+
+## Regressão polinomial
+
+É comum descrevermos a relação entre variáveis por uma reta, porém, também podemos usar outra relação que não seja linear. Nesse contexto, temos a regressão polinomial que não é nada mais que um tipo de regressão linear múltipla:
 
 $$
 y_i=a+b_1x_i+b_2x_i^2
 $$
 
-Aqui, abordaremos os modelos lineares de regressão, ou seja: regressão linear e polinomial.
-
-## Regressão linear
-
-Normalidade dos residuos, homogenidade e independencia.
-
--   O teste *t* da função **summary** testa cada variável preditora assumindo que **todas as demais variáveis já estâo presentes no modelo**.
-
--   O teste *F* da função **anova** testa as variáveis preditoras na seqüência apresentada no modelo, assumindo que as **variáveis anteriores** já estavam no modelo.
-
-## Exemplos no R - Regressão linear simples
-
-<http://www.leg.ufpr.br/~walmes/cursoR/ciaeear/ciaeear_11reg.html>
+$*$ **Cuidado com a terminologia!** **Modelo linear** é diferente de uma **relação linear**. Uma relação linear é uma simples reta descrevendo duas variáveis. Já um modelo linear se trata dos coeficientes ligados linearmente, ou seja, uma regressão polinomial também é um modelo linear.
 
 ## Regressão polinomial
 
-Regressão linar é na verdade um polinomio de grau um. Regressão polinomial é nada mais que adicionarmos a nossa mesma variável explicativa, porém elevada a um determianado grau:
+Regressão linear é um polinomio de primeiro grau. Se adicionarmos novamente nossa mesma variável explicativa, porém, elevada a um determinado grau, teremos uma regressão polinomial:
 
 -   Polinômio de primeiro grau: $resposta \sim explicativa^1$
 
@@ -60,45 +102,153 @@ Regressão linar é na verdade um polinomio de grau um. Regressão polinomial é
 
 -   Polinômio de terceiro grau: $resposta \sim explicativa^1+explicativa^2+explicativa^3$
 
-Cada grau adiciona uma curvatura a mais no nosso gráfico, logo, fica evidente que em algum momento, a regressão polinomial poderá passar em todos (ou quase todos) os pontos.
-
-**A ideia é achar até qual grau devemos ir.**
+$*$ **Atenção!** Descrever a relação entre as variáveis é diferente de explicar sua relação de causa e efeito.
 
 ## Regressão polinomial
 
-É comum que a relação entre a resposta e a variável explicativa seja uma linha. Porém, devemos estabelecer que a relação é realmente linear **contanto que outra relação não descreve significantemente melhor os dados.**
+Cada grau adiciona uma curvatura a mais no nosso gráfico, logo, fica evidente que em algum momento, a regressão polinomial poderá passar em quase todos os pontos.
 
-$*$ **Atenção!** Descrever a relação entre os dados é diferente de explicar o mecanismo/causa da relação entre as variáveis.
+```{r, out.width="55%", echo=FALSE}
+library(ggplot2)
+library(reshape2)
+library(dplyr)
 
-## Exemplos no R - regressão polinomial
+rm(list=ls())
 
-## Fazendo predições
+times <- seq(0, 800, 16.66)
 
-Se temos a equação que associa a resposta à variável explicativa, podemos facilmente obter a partir da outra. A maneira mais simples de fazer isso no R é pela função:
+my_data <- data.frame(Time = rep(times, 3)) %>%
+  mutate(Response = 1000 + 
+           # linear component
+           (((Time - 400)*6) ^ 1) + 
+           # quadratic component
+           (((Time - 400)*-0.0350) ^ 2) + 
+           # cubic component
+           (((Time - 400)*-0.0270) ^ 3)) %>%
+  mutate(Response = Response + 
+           rnorm(n = 3*length(times), mean = 0, sd = 25))
 
-$$
-predict (object,newdata...)
-$$
 
--   **object** é o objeto criado pela função **lm()**, ou seja, de onde será extraida a equação.
 
--   **newdata** define os novos valores que serão usados para predizer a resposta.
 
-    -   Deve-se utilizar o formato data.frame com o nome da coluna igual ao nome da sua variável explicativa: **newdata=data.frame(tratamento=c(1,2,3,4,5,6))**
 
-    -   Esse argumento é opcional, se não utilizá-lo, será utilizado os próprios valores da sua coluna de dados explicativa para predizer a resposta.
 
-Exemplo:
 
-```{r}
+code.poly <- function(df=NULL, predictor=NULL, poly.order=NULL, orthogonal=TRUE, draw.poly=TRUE){
+  require(reshape2)
+  require(ggplot2)
+ raw <- (orthogonal-1)^2
+  
+ 
+  if (!predictor %in% names(df)){
+    warning(paste0(predictor, " is not a variable in your data frame. Check spelling and try again"))
+  }
+  
 
+  predictor.vector <- df[,which(colnames(df)==predictor)]
+
+  predictor.indices <- as.numeric(as.factor(predictor.vector))
+  
+  df$temp.predictor.index <- predictor.indices
+
+  predictor.polynomial <- poly(x = unique(sort(predictor.vector)), 
+                               degree = poly.order, raw=raw)
+  df[, paste("poly", 1:poly.order, sep="")] <- 
+    predictor.polynomial[predictor.indices, 1:poly.order]
+  
+  if (draw.poly == TRUE){
+
+    df.poly <- unique(df[c(predictor, paste("poly", 1:poly.order, sep=""))])
+    
+
+    df.poly.melt <- melt(df.poly, id.vars=predictor)
+    
+    
+    levels(df.poly.melt$variable)[levels(df.poly.melt$variable)=="poly1"] <- "Linear"
+    levels(df.poly.melt$variable)[levels(df.poly.melt$variable)=="poly2"] <- "Quadratica"
+    levels(df.poly.melt$variable)[levels(df.poly.melt$variable)=="poly3"] <- "Cubica"
+    levels(df.poly.melt$variable)[levels(df.poly.melt$variable)=="poly4"] <- "Quartic"
+    levels(df.poly.melt$variable)[levels(df.poly.melt$variable)=="poly5"] <- "Quintic"
+    levels(df.poly.melt$variable)[levels(df.poly.melt$variable)=="poly6"] <- "Sextic"
+    
+  
+    colnames(df.poly.melt)[colnames(df.poly.melt) == "variable"] <- "Order"
+    
+    poly.plot <- ggplot(df.poly.melt, aes(y=value, color=Order))+
+      aes_string(x=predictor)+
+      geom_line()+
+      ylab("")+
+      xlab("")+
+      theme_classic()+
+      theme(axis.text.x=element_blank(),
+            axis.text.y=element_blank(),
+            axis.ticks.x=element_blank(),
+            axis.ticks.y=element_blank())
+     
+    
+    print(poly.plot)
+  }
+  
+  colnames(df)[colnames(df) == "temp.predictor.index"] <- paste0(predictor,".Index")
+  return(df)
+}
+
+data.gca <- code.poly(df=my_data, predictor="Time", poly.order=3, orthogonal=TRUE, draw.poly=TRUE)
 ```
 
-## Calculando intervalos de confiança
+**A ideia é achar até qual grau devemos ir.**
 
-## Falta de ajuste
+## Pressupostos
 
-Em experimentos planejados, geralmente existem **repetições no mesmo nível**:
+Os coeficientes em um modelo linear são estimados pelos métodos dos mínimos quadrados. Logo, a regressão linear também exige dos erros:
+
+-   **Ser independentes**: os erros não devem apresentar correlação entre si.
+-   **Ter variância homogênea (homocedásticos)**: todos os erros variam de forma igual.
+-   **Ser normais**: erros possuem distribuição normal com média igual a zero.
+
+## Como avaliar a regressão?
+
+Existem duas formas:
+
+-   **Teste F** compara a contribuição de modelos simples em relação aos mais complexos por meio da função **anova()**.
+
+    -   É um teste feito em sequência, do modelo mais simples ao mais complexo. A ideia é identificar se a de informação a mais que um modelo mais complexo explica é siginificantemente melhor do que um modelo mais simples. **Se não for, então para que um modelo complicado?**
+
+-   **Teste t** compara se cada coeficiente de cada variável do modelo é significativamente diferente de zero por meio da função **summary()**.
+
+    -   A ideia aqui é checar se um determinado coeficiente, na presença dos outros, é necessários. **Se não for, então para que ter ele no modelo?**
+
+## Como avaliar a regressão?
+
+![](images/anova_summary.png){width="711"}
+
+## Coeficiente de determinação ($R^2$)
+
+Quão melhor minha regressão explica a variação observada nos dados? O $R^2$ responde:
+
+$$
+R^2=1-\frac{Soma\;de\;quadrados\;residual}{Soma\;de\;quadrados\;total}
+$$
+
+O $R^2$ varia de 0 a 1, pois uma regressão pode explicar até no máximo 100% da variação observada na resposta.
+
+## Coeficiente de determinação ($R^2$)
+
+Visualmente fica mais fácil:
+
+![](images/r2_2.png){width="914"}
+
+## Coeficiente de determinação ajustado ($R^2_{adj}$)
+
+O coeficiente de determinação ajustado é o $R^2$ "corrigido" para o número de variáveis que o modelo usou:
+
+$$
+R^2=1-\frac{Soma\;de\;quadrados\;residual/GL_{regressão}}{Soma\;de\;quadrados\;total/GL_{total}}
+$$
+
+Por que corrigir? Porque seu $R^2$. sempre será maior quanto mais variáveis você usar para descrever a sua resposta!
+
+## Exemplos no R - regressão
 
 ```{r, out.width="70%"}
 library(ExpDes.pt) # carregar pacotes com dados de exemplo ("ex1")
@@ -106,11 +256,60 @@ dados <- ex1 # armazenar dados de exemplo em "dados"
 plot(dados$trat, dados$ig) # gráfico de dispersão
 ```
 
-## Falta de ajuste
+## Exemplos no R - regressão
 
-As repetições tornam a situação um pouco diferente, pois podemos considerar como níveis de uma categoria ou como uma variável númerica, ou seja, podemos realizar uma **regressão** quanto uma **ANOVA**:
+Ajustando um modelo de regressão polinomial de maior ordem.
 
-```{r, echo=FALSE}
+```{r}
+modelo.cubico <- lm(ig~trat+I(trat^2)+I(trat^3), data=dados) # modelo cúbico
+```
+
+## Exemplos no R - checando os pressupostos
+
+```{r,, out.width="75%"}
+par(mfrow=c(2,2)) # dividir painel gráfico
+plot(modelo.cubico) # plotar gráfico
+```
+
+## Exemplos no R - teste t
+
+```{r}
+summary(modelo.cubico) # teste t
+```
+
+## Exemplos no R - teste F
+
+Vamos testar a contribuição sequêncial dos modelos pela **anova()**:
+
+```{r}
+modelo.nulo <- lm(ig~1, data=dados) # modelo mais simples
+modelo.linear <- lm(ig~trat, data=dados) # modelo linear
+modelo.quadratico <- lm(ig~trat+I(trat^2), data=dados) # modelo quadrático
+anova(modelo.nulo, modelo.linear, modelo.quadratico, modelo.cubico) # comparação dos modelos
+```
+
+$*$ Repare que após o modelo linear, os modelos não contribuem significativamente, então, ficamos com ele.
+
+## Exemplos no R - teste F
+
+Mesmo resultado:
+
+```{r}
+anova(modelo.cubico) # anova da regressão
+```
+
+## Exemplos no R - teste F
+
+```{r, out.width="70%"}
+par(mfrow=c(2,2)) # dividir o painel
+plot(modelo.linear) # plotar o modelo
+```
+
+## Teste da falta de ajuste
+
+Como em experimentos planejados temos **repetições no mesmo nível** a situação fica um pouco diferente. Podemos considerar como níveis de um fator ou como uma variável númerica contínua, ou seja, podemos realizar uma **regressão** quanto uma **anova**.
+
+```{r, out.width="60%", echo=FALSE}
 par(mfrow=c(1,2)) # separar painel gráfico
 modelo.categorias <- lm(ig~as.factor(trat), data=dados) # modelo considerando categoria
 modelo.regressao <- lm(ig~trat, data=dados) # modelo considerando regressão
@@ -120,11 +319,13 @@ plot(dados$trat, dados$ig) # gerar segundo gráfico
 points(c(0,5,10,15), predict(modelo.categorias)[c(1,7,12,17)],col="red", pch=19, lwd=5) # colocar as médias estimadas pelo modelo 2
 ```
 
-## Falta de ajuste
+E então? Consideramos como categorias ou como variável numérica contínua?
 
-Assim, podemos testar a falta de ajuste de um modelo de regressão, comparando ele com o modelo considerando os níveis como categoria.
+## Teste da falta de ajuste
 
-```{r, echo=FALSE, out.width="70%"}
+Podemos testar a falta de ajuste de um modelo de regressão, comparando ele com o modelo que considera a variável como níveis de um fator.
+
+```{r, echo=FALSE, out.width="60%"}
 library(dplyr)
 my <- as.vector(tapply(dados$ig,as.factor(dados$trat),mean))
 d <- rep(my[1],5)
@@ -142,42 +343,66 @@ for (i in seq(0,15, by=5)){
 abline(model.reg)
 ```
 
-Repare que a falta de ajuste não é nada mais que a **diferença entre a regressão e as médias de cada nível.**
+$*$ A falta de ajuste não é nada mais que a **diferença entre a regressão e as médias de cada nível.**
 
-## Falta de ajuste
+## Exemplos no R - Teste da falta de ajuste
 
-Podemos comparar os dois modelos e idenficar se a falta de ajuste é significativa.
+Podemos testar em sequência, do modelo mais simples até o modelo que não tem diferença em relação ao modelo considerando a variável como níveis de um fator:
 
 ```{r}
 modelo.categorias <- lm(ig~as.factor(trat), data=dados) # modelo considerando categoria
-modelo.regressao <- lm(ig~trat, data=dados) # modelo considerando regressão
-anova(modelo.regressao, modelo.categorias)
+anova(modelo.linear, modelo.categorias) # testar falta de ajuste
 ```
 
-Repare que a diferença entre os dois modelos foi significativa ($p<0.05$) isso significa que a **regressão linear não é adequada**.
+Repare que a diferença entre os dois modelos foi significativa, isso significa que a **regressão linear não é adequada, pois a falta de ajuste entre os modelos é significativo.**
 
-## Falta de ajuste
+## Exemplos no R - Teste da falta de ajuste
 
-Então, se curva linear não é adequada, o que fazer?
+Então, se regressão linear não é adequada, o que fazer?
 
 ```{r}
-modelo.regressao.2 <- lm(ig~trat+I(trat^2), data=dados)
-anova(modelo.categorias, modelo.regressao.2)
-modelo.regressao.3 <- lm(ig~trat+I(trat^2)+I(trat^3), data=dados)
-anova(modelo.categorias, modelo.regressao.3)
-summary(modelo.regressao.3)
-anova(modelo.regressao.3)
+anova(modelo.categorias, modelo.quadratico) # comparar os modelos
 ```
 
-<http://www.leg.ufpr.br/~walmes/cursoR/cnpaf3/cnpaf06poli.html>
+## Exemplos no R - Teste da falta de ajuste
 
-## Pacote ExpDes.pt
+```{r, out.width="75%"}
+par(mfrow=c(2,2)) # dividir o painel
+plot(modelo.quadratico) # plotar o modelo
+```
 
-O pacote permite acrescentar variáveis numéricas na análise e aborda os principais delineamentos.
+## Exemplos no R - Pacote ExpDes.pt
 
-## Exemplos no R - regressão em DIC
+```{r}
+library(ExpDes.pt) # carregar pacote
+dados <- ex1 # armazenar ex1 em "dados"
+dic(dados$trat, dados$ig, quali=FALSE) # dic com fator quantitativo
+```
 
-## Exemplos no R - regressão em DBC
+## Exemplos no R - gerando o gráfico
+
+```{r}
+library(ggplot2) # carregando o pacote
+ggplot(dados) + # indicando os dados
+  aes(x=trat, y=ig) + # distribuindo as variáveis
+  geom_point() + # gráfico de dispersão
+  geom_smooth(formula=y~poly(x, 2), method="lm") + # adicionando linha de regressão
+  theme_classic() # alterando a estética
+```
+
+## Ideias principais
+
+-   Para usar um modelo mais complexo, ele precisa explicar significativamente que um modelo mais simples.
+
+-   O $R^2$ diz quanto da variação é explicada pelo seu modelo de regressão. Use o $R^2$ ajustado ao comparar modelos mais complexos.
+
+-   Se você tem variáveis que podem ser consideradas tanto como quantitativas quanto como níveis de um fator:
+
+    1.  Considere elas como fator e faça a anova conforme o seu delineamento para checar se o efeito do tratamento é significativo.
+
+    2.  Considere ela quantitativa e ajuste modelos de diferentes ordens.
+
+    3.  Em cada ordem, da menor para maior, compare com o modelo que considera como níveis de um fator por meio da **anova()**. O modelo primeiro modelo que não for significativamente diferente é o seu modelo.
 
 # Correlação
 
@@ -347,7 +572,7 @@ $$
 ## Exemplos no R - teste de correlação
 
 ```{r}
-cor.test(dados$zn, dados$c, method = "spearman")
+cor.test(dados$zn, dados$c, method = "spearman") # teste de spearman
 ```
 
 ## Gráfico de correlação
@@ -375,12 +600,12 @@ $$
 ## Exemplos no R - gráfico de correlação
 
 ```{r, out.width="70%"}
-library(ExpDes.pt)
-dados <- ex4
-library(ggcorrplot)
-corr <- cor(dados[,c(4, 5, 6, 7, 8, 9, 10)])
-p.valores <- cor_pmat(dados[,c(4, 5, 6, 7, 8, 9, 10)])
-ggcorrplot(corr, lab=TRUE, p.mat=p.valores, type="lower")
+library(ExpDes.pt) # carregando o pacote com dados de exemplo
+dados <- ex4 # armazenando ex4 em "dados"
+library(ggcorrplot) # carrgando pacote do gráfico de correlação
+corr <- cor(dados[,c(4, 5, 6, 7, 8, 9, 10)]) # filtrando colunas
+p.valores <- cor_pmat(dados[,c(4, 5, 6, 7, 8, 9, 10)]) # calculando p-valores
+ggcorrplot(corr, lab=TRUE, p.mat=p.valores, type="lower") # grafico de correlacao
 ```
 
 ## Teste do chi-quadrado ($\chi^2$)
@@ -436,22 +661,64 @@ chisq.test(dados$dano, dados$trat) # teste de chi-quadrado
 
 ## Códigos
 
-\`\`\`{r## Regressão} library(ExpDes.pt) dados \<- ex4 r0 \<- lm(c\~1, data=dados) r1 \<- lm(c\~zn, data=dados) summary(r1) anova(r1)
+```{r, eval=FALSE}
+### Regressão linear
+library(ExpDes.pt) # carregar pacotes com dados de exemplo ("ex1")
+dados <- ex1 # armazenar dados de exemplo em "dados"
+plot(dados$trat, dados$ig) # gráfico de dispersão
+modelo.cubico <- lm(ig~trat+I(trat^2)+I(trat^3), data=dados) # modelo cúbico
+par(mfrow=c(2,2)) # dividir painel gráfico
+plot(modelo.cubico) # plotar gráfico
+## Teste t (summary)
+summary(modelo.cubico) # teste t
+## Teste F (anova)
+modelo.nulo <- lm(ig~1, data=dados) # modelo mais simples
+modelo.linear <- lm(ig~trat, data=dados) # modelo linear
+modelo.quadratico <- lm(ig~trat+I(trat^2), data=dados) # modelo quadrático
+anova(modelo.nulo, modelo.linear, modelo.quadratico, modelo.cubico) # comparação dos modelos
+anova(modelo.cubico) # anova da regressão
+par(mfrow=c(2,2)) # dividir o painel
+plot(modelo.linear) # plotar o modelo
+## Teste da falta de ajuste
+modelo.categorias <- lm(ig~as.factor(trat), data=dados) # modelo considerando categoria
+anova(modelo.linear, modelo.categorias) # testar falta de ajuste
+anova(modelo.categorias, modelo.quadratico) # comparar os modelos
+par(mfrow=c(2,2)) # dividir o painel
+plot(modelo.quadratico) # plotar o modelo
+## pacote expdes
+library(ExpDes.pt) # carregar pacote
+dados <- ex1 # armazenar ex1 em "dados"
+dic(dados$trat, dados$ig, quali=FALSE) # dic com fator quantitativo
+## gráfico
+library(ggplot2) # carregando o pacote
+ggplot(dados) + # indicando os dados
+  aes(x=trat, y=ig) + # distribuindo as variáveis
+  geom_point() + # gráfico de dispersão
+  geom_smooth(formula=y~poly(x, 2), method="lm") + # adicionando linha de regressão
+  theme_classic() # alterando a estética
 
-plot(dados$zn,dados$c) abline(r0)
 
-dados \<- data.frame( w \<- c(0.9,1.8,2.4,3.5,3.9,4.4,5.1,5.6,6.3), s \<- c(1.4,2.6,1.0,3.7,5.5,3.2,3.0,4.9,6.3))
+### Correlação
+library(ExpDes.pt) # carregar pacotes com dados de exemplo ("ex4")
+dados <- ex4 # armazenar dados de exemplo em "dados"
+plot(dados$k, dados$c) # gráfico de dispersão
+abline(lm(dados$c~dados$k)) # tendência
+shapiro.test(dados$k) # teste de normalidade para variável "k"
+shapiro.test(dados$c) # teste de normalidade para variável "c"
+cor(dados$k, dados$c, method = "pearson") # correlação de Pearson
+cor(dados$k, dados$c, method = "spearman") # correlação de Spearman
+cor(dados[,c(4, 5, 6, 7,8)], method="spearman") # matriz de correlação
+cor.test(dados$zn, dados$c, method = "spearman") # teste de spearman
+install.package("ggcorrplot")
+library(ExpDes.pt) # carregando o pacote com dados de exemplo
+dados <- ex4 # armazenando ex4 em "dados"
+library(ggcorrplot) # carrgando pacote do gráfico de correlação
+corr <- cor(dados[,c(4, 5, 6, 7, 8, 9, 10)]) # filtrando colunas
+p.valores <- cor_pmat(dados[,c(4, 5, 6, 7, 8, 9, 10)]) # calculando p-valores
+ggcorrplot(corr, lab=TRUE, p.mat=p.valores, type="lower") # grafico de correlacao
+dados <- data.frame(dano=c(rep("alto", 55), rep("baixo", 75)),
+                    trat=c(rep("a",50), rep("b", 5), rep("a", 15), rep("b", 60))) # dados fictícios
+table(dados) # tabela de frequência
+chisq.test(dados$dano, dados$trat) # teste de chi-quadrado
 
-r0 \<- lm(s\~1, data=dados) r1 \<- lm(s\~w, data=dados) summary(r1) anova(r0,r1)
-
-## Lack of fit
-
-library(ExpDes.pt) dados \<- ex1 dic(dados$trat, dados$ig, quali=FALSE)
-
-r0 \<- lm(ig\~1, data=dados) r1 \<- lm(ig\~trat, data=dados) r2 \<- lm(ig\~poly(trat, 2, raw=TRUE), data=dados) r3 \<- lm(ig\~poly(trat, 3, raw=TRUE), data=dados) rc \<- lm(ig\~as.factor(trat), data=dados) summary(r2) anova(r0, r1, r2, r3)
-
-par(mfrow=c(1,2)) modelo.categorias \<- lm(ig\~as.factor(trat), data=dados) modelo.regressao \<- lm(ig\~trat, data=dados) plot(dados$trat, dados$ig) abline(modelo.regressao) plot(dados$trat, dados$ig) abline(modelo.categorias)
-
-predict(modelo.categorias) }
-
-\`\`\`
+```
